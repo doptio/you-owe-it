@@ -4,8 +4,8 @@ from selector import Selector
 from yaro import Request
 from cStringIO import StringIO
 
-from database import load_database
-from database import save_database
+from yoi.database import load_database
+from yoi.database import save_database
 
 import os
 import re
