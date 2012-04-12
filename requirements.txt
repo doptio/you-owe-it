@@ -1,0 +1,7 @@
+gunicorn==0.12.2
+resolver==0.2.1
+selector==0.8.11
+SimpleTAL-4.3.tar.gz
+Werkzeug==0.8.1
+wsgiref==0.1.2
+yaro==0.6.4
