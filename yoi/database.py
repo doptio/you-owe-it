@@ -1,6 +1,8 @@
-import time
+from __future__ import unicode_literals, division
+
 import datetime
 import os.path
+import time
 
 class Row:
     def __init__(self, (dato, udlaeg, udlaegger, ofrer, kommentar)):
@@ -27,7 +29,7 @@ class Database:
 def parse_date(dato):
     day, mon, year = [ int(it) for it in dato.split('-') ]
     return datetime.date(year, mon, day)
-    
+
 def load_database(path):
     file = open(path)
 

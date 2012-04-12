@@ -1,20 +1,21 @@
-from glob import glob
-from simpletal import simpleTAL, simpleTALES
-from selector import Selector
-from yaro import Request
+from __future__ import unicode_literals, division
+
 from cStringIO import StringIO
+import datetime
+from glob import glob
+import os
+import re
+from selector import Selector
+from simpletal import simpleTAL, simpleTALES
+import time
+from yaro import Request
 
 from yoi.database import load_database
 from yoi.database import save_database
 
-import os
-import re
-import time
-import datetime
-
 here = os.path.dirname(__file__)
-database_path = os.path.join(here, 'dbs')
-template_root = os.path.join(here, 'templates')
+database_path = os.path.join(here, '..', 'dbs')
+template_root = os.path.join(here, '..', 'templates')
 macro_templates = glob(os.path.join(template_root, 'macros', '*'))
 re_good_database = re.compile('^[a-z0-9-]+$')
 
@@ -77,22 +78,23 @@ def db_index(request, db_name):
         for offer, streger in row.victims:
             total_streger = total_streger + streger
         for offer, streger in row.victims:
-            gaeld[offer] = gaeld.get(offer, 0.0) + row.amount * streger / total_streger
+            gaeld[offer] = (gaeld.get(offer, 0.0)
+                            + row.amount * streger / total_streger)
         udlagt[row.spender] = udlagt.get(row.spender, 0.0) + row.amount
 
     template_names = ['db/%s/index' % db_name, 'db/index']
     return render_to_response(template_names, {
         'database': db,
-        'udlaeg': [ udlagt.get(p, 0.0) for p in db.people ],
-        'forbrug': [ gaeld.get(p, 0.0) for p in db.people ],
-        'total': [ udlagt.get(p, 0.0) - gaeld.get(p, 0.0) for p in db.people ],
+        'udlaeg': [udlagt.get(p, 0.0) for p in db.people],
+        'forbrug': [gaeld.get(p, 0.0) for p in db.people],
+        'total': [udlagt.get(p, 0.0) - gaeld.get(p, 0.0) for p in db.people],
         'today': datetime.date.today().strftime('%d-%m'),
     })
 
 @wsgi_wrap
 def db_poster(request, db_name):
     db = load_database(os.path.join(database_path, db_name))
-    return render_to_response(['db/poster'], { 'database': db })
+    return render_to_response(['db/poster'], {'database': db})
 
 @wsgi_wrap
 def db_opret(request, db_name):
@@ -108,13 +110,13 @@ def db_opret(request, db_name):
         fields = [ int(it) for it in fields ]
         fields.reverse()
         dato = datetime.date(*fields)
-    
+
     udlaeg = float(request.form['udlaeg'])
 
     udlaegger = request.form['udlaegger'].decode('utf-8')
     if not udlaegger in db.people:
         raise AssertionError, 'unknown person'
-    
+
     kommentar = request.form['kommentar'].decode('utf-8')
 
     ofrer = []
