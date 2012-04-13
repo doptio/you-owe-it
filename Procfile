@@ -1,1 +1,1 @@
-web: gunicorn yoi.views:pages --bind 0.0.0.0:${PORT}
+web: gunicorn yoi.site:app --bind 0.0.0.0:${PORT}

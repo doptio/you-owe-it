@@ -1,7 +1,3 @@
 #!/bin/sh
-
-export PORT=4000
-
 cd `dirname $0`
-
-heywood -w .
+heywood -w src -w templates -w ../dweeb/src

@@ -1,7 +1,10 @@
+Genshi==0.6
+SQLAlchemy==0.7.6
+Werkzeug==0.8.1
 gunicorn==0.12.2
+lxml==2.3
+psycopg2==2.4.2
 resolver==0.2.1
 selector==0.8.11
-SimpleTAL-4.3.tar.gz
-Werkzeug==0.8.1
+wsgi-lite==0.5a2
 wsgiref==0.1.2
-yaro==0.6.4

@@ -1,0 +1,36 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      py:strip="">
+<py:match path='head' once='true'>
+  <head>
+    <link rel='stylesheet' type='text/css'
+          href='/static/vendor/normalize.css'/>
+    <link rel='stylesheet' type='text/css' data-live='true'
+          href='/static/css/style.css'/>
+
+    ${select('*')}
+    <title py:if='not select("title")'>you-owe-it</title>
+
+    <?python from yoi.config import google_analytics_account ?>
+    <script type="text/javascript" py:if='google_analytics_account'>
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', '${google_analytics_account}']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </head>
+</py:match>
+<py:match path="body" once="true">
+  <body py:attrs="select('@*')">
+    <div id='ui' class='container'>
+      ${select("//*[@id='content']")}
+    </div>
+  </body>
+</py:match>
+</html>
