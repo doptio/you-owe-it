@@ -1,5 +1,59 @@
 from __future__ import unicode_literals, division
 
+from datetime import datetime
+from sqlalchemy import Column, String, DateTime, Integer
+from sqlalchemy.ext.declarative import declarative_base
+
+from dweeb.database import DatabaseError
+
+class NoSuchUser(DatabaseError):
+    pass
+
+class UserExists(DatabaseError):
+    pass
+
+Base = declarative_base()
+
+class User(Base):
+    __tablename__ = 'user'
+
+    id = Column(Integer, primary_key=True)
+    login = Column(String, unique=True, nullable=False)
+    created = Column(DateTime, nullable=False)
+
+    @classmethod
+    def create(cls, session, login):
+        user = User()
+        user.login = login
+        user.created = datetime.utcnow()
+        session.add(user)
+
+        try:
+            session.flush()
+        except IntegrityError:
+            raise UserExists(login)
+
+        return user
+
+    @classmethod
+    def get(cls, session, id):
+        try:
+            return session.query(User).get(id)
+        except NoResultFound:
+            raise NoSuchUser(id)
+
+    @classmethod
+    def find(cls, session, login):
+        try:
+            return session.query(User).filter_by(login=login).one()
+        except NoResultFound:
+            raise NoSuchUser(login)
+
+    @classmethod
+    def for_request(cls, request):
+        return cls.get(request.cnx, request.session['user_id'])
+
+'''
 import datetime
 import os.path
 import time
@@ -63,3 +117,4 @@ def save_database(path, database):
         line = line.encode('utf-8')
         file.write(line + '\n')
     file.close()
+'''

@@ -17,3 +17,5 @@ git push -f heroku HEAD:master
 
 git reset --hard ${head}
 git clean -fd
+
+heroku run python -m dweeb.migrate changes/
