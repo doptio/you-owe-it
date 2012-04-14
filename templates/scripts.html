@@ -1,0 +1,29 @@
+<scripts xmlns:py="http://genshi.edgewall.org/"
+         py:strip=''>
+  <?python
+    import json
+    from dweeb.resources import rewrite_local_static_url
+    from yoi.site import resources
+  ?>
+
+  <script py:for='script in resources["headjs"]'
+          src='/static/${script}'></script>
+
+  <!-- ! Export list of script URLs to javascript, so we Web Workers know what
+       to import for them to work. -->
+  <script>
+    var resources = ${json.dumps(dict(
+        (group, [
+            rewrite_local_static_url('/static/' + value)
+            for value in resources[group]
+        ])
+        for group in resources
+    ))};
+
+    head.js.apply(head.js, ${json.dumps([
+        rewrite_local_static_url('/static/' + value)
+        for group in ['dev']
+        for value in resources[group]
+    ])});
+  </script>
+</scripts>
