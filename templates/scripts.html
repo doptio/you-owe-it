@@ -22,7 +22,7 @@
 
     head.js.apply(head.js, ${json.dumps([
         rewrite_local_static_url('/static/' + value)
-        for group in ['dev']
+        for group in ['jquery', 'dev']
         for value in resources[group]
     ])});
   </script>
