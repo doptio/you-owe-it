@@ -5,7 +5,7 @@ from werkzeug.wrappers import BaseResponse
 
 from dweeb.testing import setup_module, assert_eq
 
-from yoi.pages import app
+from yoi.app import app
 
 def test_index():
     client = Client(app, BaseResponse)
