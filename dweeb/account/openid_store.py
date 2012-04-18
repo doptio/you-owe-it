@@ -1,11 +1,17 @@
 '''OpenID authentication Store using memcached.'''
 
 import logging
-import memcache
 from openid.store.interface import OpenIDStore
+import os
+import pylibmc
 
 log = logging.getLogger(__name__)
-memcache = memcache.Client(['127.0.0.1:11211'], debug=0)
+
+memcache = pylibmc.Client(servers=[os.environ.get('MEMCACHE_SERVERS',
+                                                  '127.0.0.1')],
+                          username=os.environ.get('MEMCACHE_USERNAME'),
+                          password=os.environ.get('MEMCACHE_PASSWORD'),
+                          binary=True)
 
 NONCE_TTL = 600
 
