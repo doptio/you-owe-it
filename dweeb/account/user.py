@@ -4,8 +4,8 @@ from flask.ext.wtf import Form, TextField, Required
 from openid.consumer.consumer import Consumer, SUCCESS
 from openid.consumer.discover import DiscoveryFailure
 from openid.extensions import sreg
-from openid.store.filestore import FileOpenIDStore
 
+from dweeb.account.openid_store import MemcacheStore
 from dweeb.flask_genshi import render
 
 bp = Blueprint('account.user', __name__,
@@ -34,7 +34,7 @@ def login():
 
 def make_consumer():
     # FIXME - This will not work on Heroku.
-    openid_store = FileOpenIDStore('/tmp/openid-store')
+    openid_store = MemcacheStore()
     consumer = Consumer(session, openid_store)
     return consumer
 
