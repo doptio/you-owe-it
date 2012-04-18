@@ -3,6 +3,7 @@ from flask.ext.wtf import Form, TextField, Required
 
 from openid.consumer.consumer import Consumer, SUCCESS
 from openid.consumer.discover import DiscoveryFailure
+from openid.extensions import sreg
 from openid.store.filestore import FileOpenIDStore
 
 from dweeb.flask_genshi import render
@@ -22,6 +23,8 @@ def login():
 
         try:
             auth_req = make_consumer().begin(form.openid.data)
+            auth_req.addExtension(sreg.SRegRequest(optional=['nickname',
+                                                             'fullname']))
             return redirect(auth_req.redirectURL(realm, return_to))
 
         except DiscoveryFailure, e:
@@ -45,6 +48,10 @@ def openid_return():
         return redirect(url_for('.login'))
 
     flash('Welcome, %s' % result.identity_url)
+    extra = sreg.SRegResponse.fromSuccessResponse(result)
+    if extra:
+        for key, value in extra.data.items():
+            flash('I see you! (%s: %s)' % (key, value))
     return redirect(url_for('index'))
 
     '''
