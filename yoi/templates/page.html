@@ -5,8 +5,6 @@
 <py:match path='head' once='true'>
   <head>
     <?python from yoi.site import resources ?>
-    <link rel='stylesheet' type='text/css'
-          href='/static/${resources["normalize.css"]}'/>
     <link rel='stylesheet' type='text/css' data-live='true'
           href='/static/css/style.css'/>
 
@@ -30,6 +28,7 @@
 <py:match path="body" once="true">
   <body py:attrs="select('@*')">
     <div id='ui' class='container'>
+      <div py:for='message in get_flashed_messages()'>${message}</div>
       ${select("//*[@id='content']")}
     </div>
 
