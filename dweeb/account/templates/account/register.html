@@ -7,6 +7,18 @@
     <div id='ui'>
       <h1>Register</h1>
       Hilo!
+      <form method='POST'>
+        ${form.csrf_token()}
+        <div py:if='form.errors'>There were errors!</div>
+        <div>
+          ${form.name.label()}
+          <py:if test='"name" in form.errors'>
+            <div py:for='error in form.errors["name"]'>${error}</div>
+          </py:if>
+          ${form.name()}
+        </div>
+        <div><input type='submit' value='ok'/></div>
+      </form>
     </div>
   </div>
 </body>

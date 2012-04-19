@@ -1,5 +1,6 @@
 Flask==0.8
 Flask-Genshi==0.5.1
+Flask-SQLAlchemy==0.16
 Flask-WTF==0.6
 Genshi==0.6
 SQLAlchemy==0.7.6

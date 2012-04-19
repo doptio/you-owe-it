@@ -1,5 +1,7 @@
-from flask import Blueprint, request, g, session, redirect, url_for, flash
+from flask import Blueprint, redirect, url_for, flash
+from flask import current_app as app, request, g, session
 from flask.ext.wtf import Form, TextField, Required
+from sqlalchemy import Column, Integer, String
 
 from openid.consumer.consumer import Consumer, SUCCESS
 from openid.consumer.discover import DiscoveryFailure
@@ -8,8 +10,39 @@ from openid.extensions import sreg
 from dweeb.account.openid_store import MemcacheStore
 from dweeb.flask_genshi import render
 
-bp = Blueprint('account.user', __name__,
+bp = Blueprint('account', __name__,
                template_folder='templates')
+
+### FIXME - Only premit one registration!
+@bp.before_app_request
+def get_current_user():
+    if session.get('user_id'):
+        g.user = app.db.User.get(session['user_id'])
+    else:
+        g.user = None
+
+
+@bp.record
+def database_setup(state):
+    db = state.app.db
+
+    class User(db.Model):
+        id = db.Column(db.Integer, primary_key=True)
+        name = db.Column(db.String)
+
+        @classmethod
+        def get(cls, user_id):
+            return app.db.session.query(cls).get(user_id)
+
+    class OpenId(db.Model):
+        openid = db.Column(db.String, primary_key=True)
+        user_id = db.Column('user', db.Integer, db.ForeignKey('user.id'),
+                            nullable=False)
+        user = db.relationship(User)
+
+    db.User = User
+    db.OpenId = OpenId
+
 
 class LoginForm(Form):
     openid = TextField('Your OpenID', validators=[Required()])
@@ -47,48 +80,60 @@ def openid_return():
         flash('OpenID authentication failed', 'error')
         return redirect(url_for('.login'))
 
-    flash('Welcome, %s' % result.identity_url)
+    db = app.db
+    user = (db.User.query.join(db.OpenId)
+                # FIXME -- is identity_url the right thing?
+                .filter(db.OpenId.openid == result.identity_url)
+                .first())
+
+    if user:
+        session['user_id'] = user.id
+        flash('Hilo!')
+        return redirect(url_for('index'))
+
     extra = sreg.SRegResponse.fromSuccessResponse(result)
     if extra:
-        for key, value in extra.data.items():
-            flash('I see you! (%s: %s)' % (key, value))
-    return redirect(url_for('index'))
-
-    '''
-    user = ctx.store.get_user_for_openid(result.identity_url)
-    if user:
-        login = ctx.request.session['user'] = user['login']
-        ctx.response.location = ctx.adapter.build('user_tag',
-                                                  {'user': login})
+        extra = extra.data
     else:
-        ctx.request.session['openid'] = result.identity_url
-        ctx.response.location = ctx.adapter.build('register')
-    '''
+        extra = {}
+
+    name = None
+    for key in ['fullname', 'nickname']:
+        if key in extra:
+            name = extra[key]
+            break
+
+    ### FIXME - Assign to existing user if we have a session!
+    user = db.User(name=name)
+    db.session.add(user)
+    openid = db.OpenId(user=user, openid=result.identity_url)
+    db.session.add(openid)
+    db.session.commit()
+
+    session['user_id'] = user.id
+
+    flash('Welcome, %s!' % name)
+    return redirect(url_for('.register'))
+
+class RegisterForm(Form):
+    name = TextField('Your Name')
 
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
-    if request.method == 'GET':
-        ctx.values['openid'] = ctx.request.session.get('openid', 'imposter')
-        return render_response('account/register.html')
+    if not 'user_id' in session:
+        return redirect('/login')
 
-    elif request.method == 'POST':
-        openid = ctx.values['openid'] = ctx.request.session.get('openid')
-        if not openid:
-            ctx.response.status_code = 302
-            ctx.response.location = ctx.adapter.build('login')
-            return
+    form = RegisterForm()
+    if form.validate_on_submit():
+        user = app.db.User.get(session['user_id'])
+        user.name = form.name.data
+        flash('Pleased to meet you, %s!' % form.name.data)
+        return redirect(url_for('index'))
 
-        login = ctx.request.form.get('login')
-        if ctx.store.register_user(login, openid):
-            del ctx.request.session['openid']
-            ctx.request.session['user'] = login
-            ctx.response.status_code = 302
-            ctx.response.location = ctx.adapter.build('user_tag',
-                                                      {'user': login})
-        else:
-            ctx.values['error'] = True
+    return render('account/register.html', form=form)
+
 
 @bp.route('/logout')
-def get_logout():
-    session['user'] = None
+def logout():
+    del session['user_id']
     return redirect(url_for('index'))

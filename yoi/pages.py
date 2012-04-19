@@ -1,4 +1,5 @@
 from flask import request
+from flask import current_app as app
 from flaskext.genshi import render_response
 
 def page():

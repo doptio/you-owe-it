@@ -6,8 +6,10 @@
   <div id='content'>
     <div id='ui'>
       <h1>yoi</h1>
-      <p>Hello stranger, would you like to <a
-      href='/register'>register</a>?</p>
+      <p py:if='g.user'>Hello ${g.user.name}, would you like to
+      <a href='${url_for("account.logout")}'>logout</a>?</p>
+      <p py:if='not g.user'>Hello stranger, would you like to
+      <a href='${url_for("account.login")}'>login</a>?</p>
     </div>
   </div>
 </body>

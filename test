@@ -1,2 +1,11 @@
 #!/bin/sh
+
+cd `dirname $0`
+
+export DATABASE_URL=sqlite:///$PWD/test.db
+export TESTING=true
+
+trap 'rm -f test.db' 0
+
+find . -name \*.pyc | xargs rm -f
 env `cat .env` nosetests "$@"
