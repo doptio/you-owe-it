@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# Deploy to Heroku.
+
+git push -f heroku HEAD:master
+
+heroku run bin/post-update
