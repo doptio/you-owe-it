@@ -8,7 +8,7 @@ logging_config = os.environ.get('LOGGING_CONFIG', default_logging_config)
 # psycopg2 is stupid and insists on us telling it stuff libpq is perfectly
 # capable of figuring our for it, so we put a reasonable default database name
 # into our default DB URL. Silly rabbits.
-default_db_url = 'postgresql:///' + os.environ['LOGNAME']
+default_db_url = 'postgresql:///' + os.environ.get('LOGNAME', '')
 db_url = os.environ.get('DATABASE_URL', default_db_url)
 
 testing = os.environ.get('TESTING') == 'true'
