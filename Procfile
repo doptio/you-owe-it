@@ -1,1 +1,1 @@
-web: gunicorn yoi.site:app --bind 0.0.0.0:${PORT} --log-config dweeb/logging.ini
+web: gunicorn yoi.site:app --bind 0.0.0.0:${PORT} --log-config src/dweeb/logging.ini
