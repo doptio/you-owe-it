@@ -55,6 +55,10 @@ input {
 #home-page table {
     width: 75%;
 }
+#home-page td a {
+    display: block;
+    color: black;
+}
 
 #victim-list input[type=range] {
     width: 100%;

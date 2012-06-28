@@ -31,7 +31,7 @@
 </py:def>
 
 <py:def function='render_amount(amount)'>
-  <span py:if='amount &lt; 0' class='red'>- ${'%.1f' % -amount}</span>
+  <span py:if='amount &lt; 0' class='red'>&minus; ${'%.1f' % -amount}</span>
   <span py:if='amount >= 0' class='green'>+ ${'%.1f' % amount}</span>
 </py:def>
 </xml>
