@@ -1,3 +1,7 @@
+.avatar img {
+    border-radius: 3px;
+}
+
 .entry-editor table {
     border: none;
 }
@@ -11,9 +15,9 @@
     border: 1px solid gray;
     width: 130px;
     text-align: center;
-    -webkit-border-radius: 3px;
+    border-radius: 3px;
 }
 #user-selector div:nth-child(even) {
     background-color: #f9f9f9;
-    -webkit-border-radius: 3px;
+    border-radius: 3px;
 }
