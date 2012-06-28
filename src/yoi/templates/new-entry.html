@@ -43,7 +43,7 @@
 
         <h2>victims</h2>
         <ul class='block-grid five-up'>
-          <li py:for='user in users' style='text-align: center'>
+          <li py:for='user in users'>
             <a href='#' class='toggle-victim' data-user='${user.id}'>
               ${render_avatar(user)}
             </a>
@@ -59,7 +59,7 @@
               <div>
                 <input type='hidden' name='victim' value='${user.id}'/>
                 <input type='range' value='0' min='0' max='10'
-                       name='shares' style='width: 100%;'/>
+                       name='shares'/>
               </div>
               <div class='preview'/>
             </td>
@@ -67,7 +67,6 @@
         </table>
 
         <input type='submit'
-               style='margin: 1em;'
                class='nice large radius button'
                value='Add entry'/>
 

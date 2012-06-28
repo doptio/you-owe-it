@@ -1,12 +1,60 @@
+input {
+    padding: .4em;
+    border: thin solid #a9a9a9;
+    border-radius: 3px;
+}
+
+.large.button {
+    margin: 1em 0;
+}
+
+.red {
+    color: red;
+}
+.green {
+    color: green;
+}
+
+.avatar-img {
+    vertical-align: middle;
+}
+
+.avatar {
+    text-align: center;
+    display: inline-block;
+    width: 110px;
+}
 .avatar img {
     border-radius: 3px;
 }
 
 .entry-editor table {
+    /* Override foundation's table styling. */
     border: none;
 }
 .entry-editor td {
     vertical-align: middle;
+    /* Override foundation's table styling. */
+    font-size: 13px;
+    padding-left: 0;
+}
+
+#journal-page table {
+    width: 100%;
+}
+#journal-page #overview li {
+    /* h3 sized */
+    line-height: 1;
+    font-size: 2.8rem;
+    font-weight: bold;
+}
+#journal-page #overview li img {
+    float: left;
+    margin-right: .4em;
+}
+
+#victim-list input[type=range] {
+    width: 100%;
 }
 
 #user-selector {
