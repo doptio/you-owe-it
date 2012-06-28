@@ -39,7 +39,21 @@ $.fn.yoi_entry_editor = function() {
 
     this.on('click activate', '#select-payer', function(ev) {
         ev.preventDefault();
-        alert('"payer selection" not implemented yet');
+
+        $('#user-selector')
+            .offset({top: ev.pageY, left: ev.pageX})
+            .show();
+
+        update_share_descriptions();
+    });
+    this.on('click activate', '.select-user', function(ev) {
+        ev.preventDefault();
+
+        $('#select-payer img').replaceWith($(this).find('img').clone());
+        $('input[name=payer]').val($(this).data('user'));
+
+        $('#user-selector').hide();
+
         update_share_descriptions();
     });
 

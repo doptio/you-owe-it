@@ -3,6 +3,10 @@
   from collections import namedtuple
   from hashlib import md5
 
+  def avatar_url(email, size=60):
+    hash = md5(email.lower()).hexdigest()
+    return 'http://www.gravatar.com/avatar/{}?size={}'.format(hash, size)
+
   User = namedtuple('User', 'id email amount name')
 
   users = [
@@ -11,10 +15,11 @@
     User(3, 'car@csis.dk', +117, 'criis'),
     User(4, 'sbv@csis.dk', -54, 'vrist'),
   ]
+
+  user = users[0]
 ?>
 <py:def function='avatar(email, size=60)'>
-  <img py:with='hash = md5(email.lower()).hexdigest()'
-       src='http://www.gravatar.com/avatar/${hash}?size=${size}'
+  <img src='${avatar_url(email, size=size)}'
        width='${size}' height='${size}'
        style='vertical-align: middle;'
        title='${email}' alt="${email}'s avatar"/>

@@ -4,3 +4,16 @@
 .entry-editor td {
     vertical-align: middle;
 }
+
+#user-selector {
+    position: absolute;
+    background-color: white;
+    border: 1px solid gray;
+    width: 130px;
+    text-align: center;
+    -webkit-border-radius: 3px;
+}
+#user-selector div:nth-child(even) {
+    background-color: #f9f9f9;
+    -webkit-border-radius: 3px;
+}

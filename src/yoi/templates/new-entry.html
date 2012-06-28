@@ -1,5 +1,8 @@
 <html xmlns:py="http://genshi.edgewall.org/"
       xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<?python from datetime import datetime?>
+
 <xi:include href='page.html'/>
 <xi:include href='data.xml'/>
 
@@ -14,22 +17,26 @@
           <li>
             <label>
               <h2>payer</h2>
-              <a href='#' id='select-payer'>${avatar('mig@ibofobi.dk')}</a>
-              <input type='hidden' name='payer' value='1'/>
+              <a href='#' id='select-payer'>${avatar(user.email)}</a>
+              <input type='hidden' name='payer' value='${user.id}'
+                     required='required'/>
             </label>
           </li>
 
           <li>
             <label>
               <h2>date</h2>
-              <input type='date' name='date' value='2012-07-07'/>
+              <input type='date' name='date'
+                     required='required'
+                     value='${datetime.utcnow().strftime("%Y-%m-%d")}'/>
             </label>
           </li>
 
           <li>
             <label>
               <h2>amount</h2>
-              <input type='number' name='amount' min='0' value='1'/>
+              <input type='number' name='amount' value='0'
+                     min='1' required='required'/>
             </label>
           </li>
         </ul>
@@ -59,11 +66,26 @@
             </td>
           </tr>
         </table>
-    
+
         <input type='submit'
                style='margin: 1em;'
                class='nice large radius button'
                value='Add entry'/>
+
+        <div id='user-selector' style='display: none;'>
+          <div py:for='user in users'
+               class='avatar select-user'
+               data-user='${user.id}'
+               style='text-align: center;
+                      width: 110px;
+                      padding: 20px 10px;
+                      display: inline-block;'>
+            <a href='#'>
+              ${avatar(user.email)}<br/>
+              ${user.name}
+            </a>
+          </div>
+        </div>
       </form>
     </div>
   </div>
