@@ -5,7 +5,7 @@ $.fn.yoi_entry_editor = function() {
     var self = this;
 
     var update_share_descriptions = function() {
-        var payer = self.find('input[name=payer]').val();
+        var payer = self.find(':input[name=payer]').val();
 
         var shares_total = 0;
         self.find('input[name=shares]').each(function(i, e) {
@@ -36,6 +36,33 @@ $.fn.yoi_entry_editor = function() {
     this.find('input').on('change', function(ev) {
         update_share_descriptions();
     });
+
+    this.on('click activate', '#select-payer', function(ev) {
+        ev.preventDefault();
+        alert('"payer selection" not implemented yet');
+        update_share_descriptions();
+    });
+
+    this.on('click activate', '.toggle-victim', function(ev) {
+        ev.preventDefault();
+        var victim = $(this).data('user');
+        self.find('.victim').each(function(i, e) {
+            var e = $(e);
+            if(e.data('user') != victim)
+                return;
+            if(e.filter(':visible').length > 0)
+                e.find('input[name=shares]').val(0);
+            else
+                e.find('input[name=shares]').val(1);
+            e.toggle();
+        });
+
+        update_share_descriptions();
+    });
+
+    var payer = $('input[name=payer]').val()
+    $('.toggle-victim[data-user=' + payer + ']').click();
+
     update_share_descriptions();
 };
 

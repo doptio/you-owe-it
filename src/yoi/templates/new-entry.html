@@ -6,19 +6,16 @@
 <head/>
 <body class='widget-app'>
   <div id='content'>
-    <div class='entry-editor'>
+    <div>
       <h1>add new entry</h1>
 
-      <form action='journal'>
+      <form action='journal' class='entry-editor'>
         <ul class='block-grid four-up'>
           <li>
             <label>
               <h2>payer</h2>
-              <select name='payer'>
-                <option py:for='user in users' value='${user.id}'>
-                  ${user.name}
-                </option>
-              </select>
+              <a href='#' id='select-payer'>${avatar('mig@ibofobi.dk')}</a>
+              <input type='hidden' name='payer' value='1'/>
             </label>
           </li>
 
@@ -40,20 +37,23 @@
         <h2>victims</h2>
         <ul class='block-grid five-up'>
           <li py:for='user in users' style='text-align: center'>
-            ${avatar(user.email)}<br/>
-            ${user.name}
+            <a href='#' class='toggle-victim' data-user='${user.id}'>
+              ${avatar(user.email)}<br/>
+              ${user.name}
+            </a>
           </li>
         </ul>
 
-        <table>
-          <tr py:for='user_id, email in users' class='victim'>
-            <td>${avatar(email)}</td>
+        <table id='victim-list'>
+          <tr py:for='user in users' class='victim'
+              data-user='${user.id}'
+              style='display: none;'>
+            <td>${avatar(user.email)}</td>
             <td>
               <div>
-                <input type='hidden' name='victim' value='${user_id}'/>
-                <input type='range' value='1' min='0' max='10'
-                       name='shares'
-                       style='width: 100%;'/>
+                <input type='hidden' name='victim' value='${user.id}'/>
+                <input type='range' value='0' min='0' max='10'
+                       name='shares' style='width: 100%;'/>
               </div>
               <div class='preview'/>
             </td>
