@@ -68,4 +68,8 @@ $.fn.yoi_entry_editor = function() {
 
 $(document).ready(function() {
     $('.entry-editor').yoi_entry_editor();
+
+    if(document.location.pathname == '/journal'
+       && document.location.search != '')
+        $('#new-entry-notice').toggle();
 });
