@@ -13,70 +13,74 @@
       <h1>add new entry</h1>
 
       <form action='journal' class='entry-editor'>
-        <ul class='block-grid four-up'>
-          <li>
-            <label>
-              <h2>payer</h2>
-              <a href='#' id='select-payer'>${render_avatar(user)}</a>
-              <input type='hidden' name='payer' value='${user.id}'
-                     required='required'/>
-            </label>
-          </li>
+        <div class='panel'>
+          <ul class='block-grid three-up'>
+            <li>
+              <label>
+                <h2>payer</h2>
+                <a href='#' id='select-payer'>${render_avatar(user)}</a>
+                <input type='hidden' name='payer' value='${user.id}'
+                       required='required'/>
+              </label>
 
-          <li>
-            <label>
-              <h2>date</h2>
-              <input type='date' name='date'
-                     required='required'
-                     value='${datetime.utcnow().strftime("%Y-%m-%d")}'/>
-            </label>
-          </li>
-
-          <li>
-            <label>
-              <h2>amount</h2>
-              <input type='number' name='amount' value='0'
-                     min='1' required='required'/>
-            </label>
-          </li>
-        </ul>
-
-        <h2>victims</h2>
-        <ul class='block-grid five-up'>
-          <li py:for='user in users'>
-            <a href='#' class='toggle-victim' data-user='${user.id}'>
-              ${render_avatar(user)}
-            </a>
-          </li>
-        </ul>
-
-        <table id='victim-list'>
-          <tr py:for='user in users' class='victim'
-              data-user='${user.id}'
-              style='display: none;'>
-            <td>${render_avatar(user)}</td>
-            <td>
-              <div>
-                <input type='hidden' name='victim' value='${user.id}'/>
-                <input type='range' value='0' min='0' max='10'
-                       name='shares'/>
+              <div id='user-selector' style='display: none;'>
+                <div py:for='user in users'
+                     class='select-user'
+                     data-user='${user.id}'>
+                  <a href='#'>${render_avatar(user)}</a>
+                </div>
               </div>
-              <div class='preview'/>
-            </td>
-          </tr>
-        </table>
+            </li>
+
+            <li>
+              <label>
+                <h2>date</h2>
+                <input type='date' name='date'
+                       required='required'
+                       value='${datetime.utcnow().strftime("%Y-%m-%d")}'/>
+              </label>
+            </li>
+
+            <li>
+              <label>
+                <h2>amount</h2>
+                <input type='number' name='amount' value='0'
+                       min='1' required='required'/>
+              </label>
+            </li>
+          </ul>
+        </div>
+
+        <div class='panel'>
+          <h2>victims</h2>
+          <ul class='block-grid five-up'>
+            <li py:for='user in users'>
+              <a href='#' class='toggle-victim' data-user='${user.id}'>
+                ${render_avatar(user)}
+              </a>
+            </li>
+          </ul>
+
+          <table id='victim-list'>
+            <tr py:for='user in users' class='victim'
+                data-user='${user.id}'
+                style='display: none;'>
+              <td>${render_avatar(user)}</td>
+              <td>
+                <div>
+                  <input type='hidden' name='victim' value='${user.id}'/>
+                  <input type='range' value='0' min='0' max='10'
+                         name='shares'/>
+                </div>
+                <div class='preview'/>
+              </td>
+            </tr>
+          </table>
+        </div>
 
         <input type='submit'
                class='nice large radius button'
                value='Add entry'/>
-
-        <div id='user-selector' style='display: none;'>
-          <div py:for='user in users'
-               class='select-user'
-               data-user='${user.id}'>
-            <a href='#'>${render_avatar(user)}</a>
-          </div>
-        </div>
       </form>
     </div>
   </div>

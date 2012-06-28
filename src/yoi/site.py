@@ -5,4 +5,4 @@ from yoi import pages
 from yoi import authentication
 
 if __name__ == '__main__':
-    app.run(port=4000)
+    app.run('0.0.0.0', port=4000)

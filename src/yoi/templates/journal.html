@@ -16,14 +16,16 @@
     <a class='nice large radius button' href='#'>Invite friend</a>
     <a class='nice large radius button' href='new-entry'>Add entry</a>
 
-    <h2>members</h2>
-    <ul id='overview' class='block-grid three-up'>
-      <li py:for='user in users'>
-        ${render_avatar_img(user)}
-        ${user.name}<br/>
-        ${render_amount(user.amount)}
-      </li>
-    </ul>
+    <div class='panel'>
+      <h2>members</h2>
+      <ul id='overview' class='block-grid three-up'>
+        <li py:for='user in users'>
+          ${render_avatar_img(user)}
+          ${user.name}<br/>
+          ${render_amount(user.amount)}
+        </li>
+      </ul>
+    </div>
 
     <h2>recent entries</h2>
     <table>

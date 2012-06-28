@@ -17,6 +17,7 @@ input {
 
 .avatar-img {
     vertical-align: middle;
+    border-radius: 3px;
 }
 
 .avatar {
@@ -24,13 +25,11 @@ input {
     display: inline-block;
     width: 110px;
 }
-.avatar img {
-    border-radius: 3px;
-}
 
 .entry-editor table {
     /* Override foundation's table styling. */
     border: none;
+    background: none;
 }
 .entry-editor td {
     vertical-align: middle;
@@ -53,6 +52,10 @@ input {
     margin-right: .4em;
 }
 
+#home-page table {
+    width: 75%;
+}
+
 #victim-list input[type=range] {
     width: 100%;
 }
@@ -64,8 +67,12 @@ input {
     width: 130px;
     text-align: center;
     border-radius: 3px;
+    z-index: 100;
 }
-#user-selector div:nth-child(even) {
+#user-selector .select-user {
+    margin: 20px 0;
+}
+#user-selector .select-user:nth-child(even) {
     background-color: #f9f9f9;
     border-radius: 3px;
 }
