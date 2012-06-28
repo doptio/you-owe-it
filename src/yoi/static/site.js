@@ -5,6 +5,24 @@ $.fn.yoi_entry_editor = function() {
     var self = this;
 
     var update_share_descriptions = function() {
+        if(self.find('input[name=manual-entry]').attr('checked'))
+            update_share_descriptions_manual();
+        else
+            update_share_descriptions_automatic();
+    };
+
+    var update_share_descriptions_manual = function() {
+        self.find('.preview').hide();
+
+        var amount_total = 0;
+        self.find('.victim input[name=shares]').each(function(i, e) {
+            amount_total += parseFloat(e.value);
+        });
+
+        self.find('input[name=amount]').val(amount_total);
+    };
+
+    var update_share_descriptions_automatic = function() {
         var payer = self.find(':input[name=payer]').val();
 
         var shares_total = 0;
@@ -29,7 +47,7 @@ $.fn.yoi_entry_editor = function() {
                            + formatAmount(amount) + ' DKK)';
             text = text.replace('(1 shares', '(1 share');
 
-            e.find('.preview').text(text);
+            e.find('.preview').text(text).show();
         });
     };
 
@@ -60,6 +78,24 @@ $.fn.yoi_entry_editor = function() {
         update_share_descriptions();
     });
 
+    self.on('change', 'input[name=manual-entry]', function(ev) {
+        var amount_readonly = this.checked,
+            shares_type = this.checked ? 'number' : 'range',
+            shares_max = this.checked ? undefined : 10;
+
+        self.find('input[name=amount]')
+            .attr('readonly', amount_readonly);
+        self.find('input[name=shares]')
+            /* Because IE is sucky jQuery refuses to touch the type attribute,
+             * but we don't give a rat's ass about IE. */
+            .each(function(i, e) {
+                e.type = shares_type;
+                e.max = shares_max;
+            });
+
+        update_share_descriptions();
+    });
+
     this.on('click activate', '.toggle-victim', function(ev) {
         ev.preventDefault();
         var victim = $(this).data('user');
@@ -69,7 +105,7 @@ $.fn.yoi_entry_editor = function() {
                 return;
             if(e.filter(':visible').length > 0)
                 e.find('input[name=shares]').val(0);
-            else
+            else if(! self.find('input[name=manual-entry]').attr('checked'))
                 e.find('input[name=shares]').val(1);
             e.toggle();
         });
