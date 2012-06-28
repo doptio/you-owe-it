@@ -40,8 +40,9 @@ $.fn.yoi_entry_editor = function() {
     this.on('click activate', '#select-payer', function(ev) {
         ev.preventDefault();
 
+        var offset = $(this).offset();
         $('#user-selector')
-            .offset({top: ev.pageY, left: ev.pageX})
+            .css({top: ev.pageY, left: ev.pageX - offset.left})
             .show();
 
         update_share_descriptions();
