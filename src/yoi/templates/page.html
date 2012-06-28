@@ -8,6 +8,9 @@
     <link rel='stylesheet' type='text/css' data-live='true'
           href='/static/css/style.css'/>
 
+    <link rel='stylesheet' type='text/css'
+          href='/static/vendor/foundation-2.2.1/stylesheets/foundation.css'/>
+
     ${select('*')}
     <title py:if='not select("title")'>you-owe-it</title>
 
@@ -29,7 +32,11 @@
   <body py:attrs="select('@*')">
     <div id='ui' class='container'>
       <div py:for='message in get_flashed_messages()'>${message}</div>
-      ${select("//*[@id='content']")}
+      <div class='row'>
+        <div class='twelve columns'>
+          ${select("//*[@id='content']")}
+        </div>
+      </div>
     </div>
 
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js'></script>
