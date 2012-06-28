@@ -4,9 +4,8 @@ from contextlib import contextmanager
 from mock import patch
 from openid.consumer.consumer import SUCCESS
 
-from dweeb.testing import setup_module, assert_eq
-
 from yoi.site import app
+from yoi.testing import setup_module, assert_eq
 
 def test_index():
     resp = client.get('/')

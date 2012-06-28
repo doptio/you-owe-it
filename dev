@@ -1,3 +1,4 @@
 #!/bin/sh
 cd `dirname $0`
-heywood -w .
+exec python -m yoi.site
+#heywood -w .

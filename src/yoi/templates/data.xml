@@ -1,0 +1,27 @@
+<xml xmlns:py="http://genshi.edgewall.org/" py:strip=''>
+<?python
+  from collections import namedtuple
+  from hashlib import md5
+
+  User = namedtuple('User', 'id email amount name')
+
+  users = [
+    User(1, 'mig@ibofobi.dk', -42, 'sune'),
+    User(2, 'f@doptio.com', -21, 'fritte'),
+    User(3, 'car@csis.dk', +117, 'criis'),
+    User(4, 'sbv@csis.dk', -54, 'vrist'),
+  ]
+?>
+<py:def function='avatar(email, size=60)'>
+  <img py:with='hash = md5(email.lower()).hexdigest()'
+       src='http://www.gravatar.com/avatar/${hash}?size=${size}'
+       width='${size}' height='${size}'
+       style='vertical-align: middle;'
+       title='${email}' alt="${email}'s avatar"/>
+</py:def>
+
+<py:def function='render_amount(amount)'>
+  <span py:if='amount &lt; 0' style='color: red'>- ${'%.1f' % -amount}</span>
+  <span py:if='amount >= 0' style='color: green'>+ ${'%.1f' % amount}</span>
+</py:def>
+</xml>

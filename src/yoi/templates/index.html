@@ -1,61 +1,16 @@
 <html xmlns:py="http://genshi.edgewall.org/"
       xmlns:xi="http://www.w3.org/2001/XInclude">
 <xi:include href='page.html'/>
-<?python
-  from hashlib import md5
-  users = [
-    (1, 'mig@ibofobi.dk'),
-    (2, 'f@doptio.com'),
-    (3, 'car@csis.dk'),
-    (4, 'sbv@csis.dk'),
-  ]
-?>
-<py:def function='avatar(email, size=60)'>
-  <img py:with='hash = md5(email.lower()).hexdigest()'
-       src='http://www.gravatar.com/avatar/${hash}?size=${size}'
-       width='${size}' height='${size}'
-       title='${email}' alt="${email}'s avatar"/>
-</py:def>
 <head/>
 <body class='widget-app'>
   <div id='content'>
-    <div id='ui'>
+    <h1>nothing to see here, move along</h1>
+    <div id='ui' py:if='False'>
       <h1>yoi</h1>
       <p py:if='g.user'>Hello ${g.user.name}, would you like to
       <a href='${url_for("account.logout")}'>logout</a>?</p>
       <p py:if='not g.user'>Hello stranger, would you like to
       <a href='${url_for("account.login")}'>login</a>?</p>
-    </div>
-
-    <div class='entry-editor'>
-      <h1>add new entry</h1>
-
-      <h2>udlagt</h2>
-      <table>
-        <tr>
-          <td>${avatar('mig@ibofobi.dk')}</td>
-          <td>
-            <input type='hidden' name='payer' value='1'/>
-            <input type='number' value='117' name='amount'/> DKK
-          </td>
-        </tr>
-      </table>
-
-      <h2>ofre</h2>
-      <table>
-        <tr py:for='user_id, email in users' class='victim'>
-          <td>${avatar(email)}</td>
-          <td>
-            <div>
-              <input type='hidden' name='victim' value='${user_id}'/>
-              <input type='range' value='1' min='0' max='10'
-                     name='shares'
-                     style='width: 100%;'/>
-            </div>
-            <div class='preview'/>
-          </td>
-        </tr>
-      </table>
     </div>
   </div>
 </body>

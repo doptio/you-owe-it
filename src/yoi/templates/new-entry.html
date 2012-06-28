@@ -1,0 +1,71 @@
+<html xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href='page.html'/>
+<xi:include href='data.xml'/>
+
+<head/>
+<body class='widget-app'>
+  <div id='content'>
+    <div class='entry-editor'>
+      <h1>add new entry</h1>
+
+      <form action='journal'>
+        <ul class='block-grid four-up'>
+          <li>
+            <label>
+              <h2>payer</h2>
+              <select name='payer'>
+                <option py:for='user in users' value='${user.id}'>
+                  ${user.name}
+                </option>
+              </select>
+            </label>
+          </li>
+
+          <li>
+            <label>
+              <h2>date</h2>
+              <input type='date' name='date' value='2012-07-07'/>
+            </label>
+          </li>
+
+          <li>
+            <label>
+              <h2>amount</h2>
+              <input type='number' name='amount' min='0' value='1'/>
+            </label>
+          </li>
+        </ul>
+
+        <h2>victims</h2>
+        <ul class='block-grid five-up'>
+          <li py:for='user in users' style='text-align: center'>
+            ${avatar(user.email)}<br/>
+            ${user.name}
+          </li>
+        </ul>
+
+        <table>
+          <tr py:for='user_id, email in users' class='victim'>
+            <td>${avatar(email)}</td>
+            <td>
+              <div>
+                <input type='hidden' name='victim' value='${user_id}'/>
+                <input type='range' value='1' min='0' max='10'
+                       name='shares'
+                       style='width: 100%;'/>
+              </div>
+              <div class='preview'/>
+            </td>
+          </tr>
+        </table>
+    
+        <input type='submit'
+               style='margin: 1em;'
+               class='nice large radius button'
+               value='Add entry'/>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

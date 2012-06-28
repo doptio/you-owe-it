@@ -1,0 +1,56 @@
+<html xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href='page.html'/>
+<xi:include href='data.xml'/>
+<head/>
+<body class='widget-app'>
+  <div id='content'>
+    <h1>journal bio</h1>
+
+    <ul class='block-grid three-up'>
+      <li py:for='user in users'>
+        <div>
+          ${avatar(user.email)}
+          <h3 style='display: inline-block; vertical-align: middle;
+                     margin: 0 .4em'>
+            ${user.name}<br/>
+            ${render_amount(user.amount)}
+          </h3>
+        </div>
+      </li>
+    </ul>
+
+    <a style='margin: 1em;' class='nice large radius button' href='new-entry'>Add entry</a>
+
+    <h2>recent entries</h2>
+    <table>
+      <thead>
+        <th>date</th>
+        <th>who</th>
+        <th>amount</th>
+        <th>description</th>
+      </thead>
+
+      <tr>
+        <td>2012-06-06</td>
+        <td>mig@ibofobi.dk</td>
+        <td>${render_amount(42)}</td>
+        <td>bought something</td>
+      </tr>
+      <tr>
+        <td/>
+        <td>mig@ibofobi.dk</td>
+        <td>${render_amount(-21)}</td>
+        <td/>
+      </tr>
+      <tr>
+        <td/>
+        <td>car@csis.dk</td>
+        <td>${render_amount(-21)}</td>
+        <td/>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>
+
