@@ -18,11 +18,21 @@
 
   user = users[0]
 ?>
-<py:def function='avatar(email, size=60)'>
-  <img src='${avatar_url(email, size=size)}'
-       width='${size}' height='${size}'
-       style='vertical-align: middle;'
-       title='${email}' alt="${email}'s avatar"/>
+<py:def function='render_avatar_img(user, size=60)'>
+    <img src='${avatar_url(user.email, size=size)}'
+         width='${size}' height='${size}'
+         style='vertical-align: middle;'
+         alt="${user.name}'s avatar"/>
+</py:def>
+<py:def function='render_avatar(user, size=60)'>
+  <span class='avatar' data-user='${user.id}'
+        style='text-align: center;
+               width: 110px;
+               padding: 20px 10px;
+               display: inline-block;'>
+    ${render_avatar_img(user, size=size)}<br/>
+    ${user.name}
+  </span>
 </py:def>
 
 <py:def function='render_amount(amount)'>

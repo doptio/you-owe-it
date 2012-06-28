@@ -17,7 +17,7 @@
           <li>
             <label>
               <h2>payer</h2>
-              <a href='#' id='select-payer'>${avatar(user.email)}</a>
+              <a href='#' id='select-payer'>${render_avatar(user)}</a>
               <input type='hidden' name='payer' value='${user.id}'
                      required='required'/>
             </label>
@@ -45,8 +45,7 @@
         <ul class='block-grid five-up'>
           <li py:for='user in users' style='text-align: center'>
             <a href='#' class='toggle-victim' data-user='${user.id}'>
-              ${avatar(user.email)}<br/>
-              ${user.name}
+              ${render_avatar(user)}
             </a>
           </li>
         </ul>
@@ -55,7 +54,7 @@
           <tr py:for='user in users' class='victim'
               data-user='${user.id}'
               style='display: none;'>
-            <td>${avatar(user.email)}</td>
+            <td>${render_avatar(user)}</td>
             <td>
               <div>
                 <input type='hidden' name='victim' value='${user.id}'/>
@@ -74,16 +73,9 @@
 
         <div id='user-selector' style='display: none;'>
           <div py:for='user in users'
-               class='avatar select-user'
-               data-user='${user.id}'
-               style='text-align: center;
-                      width: 110px;
-                      padding: 20px 10px;
-                      display: inline-block;'>
-            <a href='#'>
-              ${avatar(user.email)}<br/>
-              ${user.name}
-            </a>
+               class='select-user'
+               data-user='${user.id}'>
+            <a href='#'>${render_avatar(user)}</a>
           </div>
         </div>
       </form>

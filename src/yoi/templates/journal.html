@@ -15,7 +15,7 @@
     <ul class='block-grid three-up'>
       <li py:for='user in users'>
         <div>
-          ${avatar(user.email)}
+          ${render_avatar_img(user)}
           <h3 style='display: inline-block; vertical-align: middle;
                      margin: 0 .4em'>
             ${user.name}<br/>

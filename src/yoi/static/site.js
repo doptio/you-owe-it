@@ -49,10 +49,12 @@ $.fn.yoi_entry_editor = function() {
     this.on('click activate', '.select-user', function(ev) {
         ev.preventDefault();
 
-        $('#select-payer img').replaceWith($(this).find('img').clone());
-        $('input[name=payer]').val($(this).data('user'));
-
-        $('#user-selector').hide();
+        $('#user-selector')
+            .hide();
+        $('#select-payer .avatar')
+            .replaceWith($(this).find('.avatar').clone());
+        $('input[name=payer]')
+            .val($(this).data('user'));
 
         update_share_descriptions();
     });
