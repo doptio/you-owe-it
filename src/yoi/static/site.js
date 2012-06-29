@@ -138,7 +138,10 @@ $(document).ready(function() {
             autoOpen: false,
             width: '50%',
             modal: true,
-            buttons: { Ok: function() { self.dialog('close') } }
+            buttons: { Ok: function() {
+                self.trigger('dialog-ok');
+                self.dialog('close');
+            } }
         };
         dialogs[this.id] = self.dialog(dialog_opts);
     });
@@ -146,5 +149,44 @@ $(document).ready(function() {
     $(document).on('click activate', '.for-dialog', function(ev) {
         ev.preventDefault();
         dialogs[$(this).data('dialog')].dialog('open');
+    });
+});
+
+/* Magic for "Add People" dialog */
+$(document).ready(function() {
+    $('#add-people').on('keyup', 'input[name=name]', function() {
+        /* Add a new empty input, if this is the last input, and it not
+         * empty. */
+        var this_is_last = ($(this)
+                                .closest('li')
+                                .filter(':last-child')
+                                .length > 0);
+
+        if(this.value != '' && this_is_last) {
+            var ol = $(this).closest('ol');
+            var li = ol.find('li:first-child').clone();
+            li.find('input').val('');
+            ol.append(li);
+        }
+    });
+
+    $('#add-people').on('blur focus', 'input[name=name]', function() {
+        /* Remove all empty inputs, except the last one. */
+        $(this)
+            .closest('ol')
+            .find('li:not(:last-child):has(input[value=""])')
+            .remove();
+    });
+
+    $('#add-people').on('dialogopen', function() {
+        /* Reset dialog when opening */
+        $(this)
+            .find('li:not(:first-child)').remove().end()
+            .find('li input').val('');
+    });
+
+    $('#add-people').on('dialog-ok', function() {
+        /* FIXME - Submit form! */
+        console.log($('#add-people').find('input[value!=""]'));
     });
 });

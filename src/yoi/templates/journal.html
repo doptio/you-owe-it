@@ -13,7 +13,8 @@
     </div>
 
     <h1>journal bio</h1>
-    <a class='nice large radius button' href='#'>Add people</a>
+    <a class='nice large radius button for-dialog'
+       data-dialog='add-people' href='#'>Add people</a>
     <a class='nice large radius button' href='new-entry'>Add entry</a>
     <a class='nice large radius button for-dialog'
        data-dialog='invite-friends' href='#'>Invite friends</a>
@@ -59,7 +60,15 @@
     </table>
     <a class='nice large radius button' href='#'>View all entries</a>
 
-    <div id='invite-friends' class='dialog' style='display: none;'>
+    <div id='add-people' class='dialog'>
+      <h1>Add People</h1>
+      <p>Enter the names of people to add, one per input:</p>
+      <ol>
+        <li><input type='text' name='name' placeholder='name'/></li>
+      </ol>
+    </div>
+
+    <div id='invite-friends' class='dialog'>
       <h1>Invite Friends</h1>
       <p>Invite your friends to join this journal via this link:</p>
       <div style='padding: .5em 2em;'>
