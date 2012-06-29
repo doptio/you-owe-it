@@ -126,3 +126,25 @@ $(document).ready(function() {
        && document.location.search != '')
         $('#new-entry-notice').toggle();
 });
+
+/* Generic dialogs */
+$(document).ready(function() {
+    var dialogs = {};
+    $('.dialog').each(function(i, e) {
+        var self = $(this);
+        var title = self.find('h1').remove().text();
+        var dialog_opts = {
+            title: title,
+            autoOpen: false,
+            width: '50%',
+            modal: true,
+            buttons: { Ok: function() { self.dialog('close') } }
+        };
+        dialogs[this.id] = self.dialog(dialog_opts);
+    });
+
+    $(document).on('click activate', '.for-dialog', function(ev) {
+        ev.preventDefault();
+        dialogs[$(this).data('dialog')].dialog('open');
+    });
+});

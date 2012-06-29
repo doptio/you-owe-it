@@ -13,8 +13,10 @@
     </div>
 
     <h1>journal bio</h1>
-    <a class='nice large radius button' href='#'>Invite friend</a>
+    <a class='nice large radius button' href='#'>Add people</a>
     <a class='nice large radius button' href='new-entry'>Add entry</a>
+    <a class='nice large radius button for-dialog'
+       data-dialog='invite-friends' href='#'>Invite friends</a>
 
     <div class='panel'>
       <h2>members</h2>
@@ -56,6 +58,14 @@
       </tr>
     </table>
     <a class='nice large radius button' href='#'>View all entries</a>
+
+    <div id='invite-friends' class='dialog' style='display: none;'>
+      <h1>Invite Friends</h1>
+      <p>Invite your friends to join this journal via this link:</p>
+      <div style='padding: .5em 2em;'>
+        <a href='${request.base_url}'>${request.base_url}</a>
+      </div>
+    </div>
   </div>
 </body>
 </html>
