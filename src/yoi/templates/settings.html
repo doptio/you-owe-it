@@ -10,12 +10,25 @@
     <form method='POST' action='${url_for("settings")}'>
       ${form.csrf_token}
 
-      <p>What name would you like to be known by?</p>
-      <ul py:if='form.name.errors' class='errors'>
-        <li py:for='error in form.name.errors'>${error}</li>
-      </ul>
-      ${form.name(placeholder='name', required=True, max=15, autofocus=True,
-                  class_='in-error' if 'name' in form.name.errors else '')}
+      <py:def function='render_field(field, **kwargs)'>
+        <ul py:if='field.errors' class='errors'>
+          <li py:for='error in field.errors'>${error}</li>
+        </ul>
+        ${field(**kwargs)}
+      </py:def>
+
+      <h3>What name would you like to be known by?</h3>
+      ${render_field(form.name, placeholder='name', autofocus=True,
+                     required=True, min=3, max=15)}
+
+      <h3>Customize your avatar</h3>
+      <p>To customize your avatar you have to sign up with
+      <a href='https://en.gravatar.com/site/signup/'>gravatar</a>, and tell
+      your e-mail address. We promise not to spam you, or give your e-mail
+      address to anyone else, or do anything else naughty with it.</p>
+      ${render_field(form.email, type='email',
+                     placeholder='optional e-mail address',
+                     max=30)}
 
       <input type='submit' class='button' value='save settings'/>
     </form>

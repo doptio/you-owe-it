@@ -32,6 +32,7 @@
 
 /* Missing HTML5 input styles from foundation */
 input[type=date],
+input[type=email],
 input[type=number] {
     display: block;
     border: 1px solid #ccc;
@@ -48,12 +49,14 @@ input[type=number] {
     transition: all 0.15s linear;
 }
 input[type=date]:focus,
+input[type=email]:focus,
 input[type=number]:focus {
     background: #fafafa;
     outline: none !important;
     border-color: #b3b3b3;
 }
 input[type=date][disabled],
+input[type=email][disabled],
 input[type=number][disabled] {
     background-color: #ddd;
 }

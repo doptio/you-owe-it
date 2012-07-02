@@ -2,7 +2,7 @@ from __future__ import unicode_literals, division
 
 from flask import g, request, url_for, redirect, flash
 from flaskext.genshi import render_response
-from flaskext.wtf import Form, TextField, Required
+from flaskext.wtf import Form, TextField, Required, Optional, Email, Length
 
 from yoi.app import app
 
@@ -15,7 +15,15 @@ def home():
     return render_response('home.html')
 
 class UserSettingsForm(Form):
-    name = TextField('name', validators=[Required()])
+    name = TextField('name', validators=[
+        Required(),
+        Length(min=3, max=15),
+    ])
+    email = TextField('e-mail', validators=[
+        Optional(),
+        Email(),
+        Length(max=30),
+    ])
 
 @app.route('/settings', methods=['GET', 'POST'])
 def settings():
