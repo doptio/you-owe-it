@@ -111,7 +111,8 @@ def openid_return():
 
     session['user_id'] = user.id
 
-    flash('Welcome, %s!' % name)
+    if name:
+        flash('Welcome, %s!' % name)
     return redirect(url_for('.register'))
 
 class RegisterForm(Form):
