@@ -3,29 +3,41 @@
 <xi:include href='../page.html'/>
 <head/>
 <body>
-  <div id='content'>
-    <div id='ui'>
-      <h1>Hilo!</h1>
-      <form method='POST'>
-        ${form.csrf_token()}
-        <div py:if='form.errors'>There were errors!</div>
-        <div>
-          ${form.openid.label()}
-          <py:if test='"openid" in form.errors'>
-            <div py:for='error in form.errors["openid"]'>${error}</div>
-          </py:if>
-          ${form.openid(**{'class': 'six'})}
-        </div>
-        <div><input type='submit' value='login with openid'
-                    class='button'/></div>
-      </form>
-
-      <form method='POST'>
-        ${form.csrf_token()}
-        <input type='hidden' name='openid'
-               value='https://www.google.com/accounts/o8/id'/>
-        <input type='submit' value='login with gmail' class='button'/>
-      </form>
+  <div id='content' class='row'>
+    <div class='six columns centered'>
+      <dl class='tabs'>
+        <dd class='active'><a href='#gmail-login'>Login with Google</a></dd>
+        <dd py:if='False'><a href='#openid-login'>Login with OpenID</a></dd>
+      </dl>
+      
+      <ul class='tabs-content'>
+        <p>No need to remember another username and password, just use your
+        Google account to login, we won't know your e-mail, password or
+        anything else about you for that matter.</p>
+        <li id='gmail-login' class='active'>
+          <form method='POST'>
+            ${form.csrf_token()}
+            <input type='hidden' name='openid'
+                   value='https://www.google.com/accounts/o8/id'/>
+            <input type='submit' value='login' class='button'/>
+          </form>
+        </li>
+        <li py:if='False' id='openid-login'>
+          <form method='POST'>
+            ${form.csrf_token()}
+            <div py:if='form.errors'>There were errors!</div>
+            <div>
+              ${form.openid.label()}
+              <py:if test='"openid" in form.errors'>
+                <div py:for='error in form.errors["openid"]'>${error}</div>
+              </py:if>
+              ${form.openid()}
+            </div>
+            <div><input type='submit' value='login'
+                        class='button'/></div>
+          </form>
+        </li>
+      </ul>
     </div>
   </div>
 </body>
