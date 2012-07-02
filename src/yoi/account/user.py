@@ -115,7 +115,7 @@ def openid_return():
     return redirect(url_for('.register'))
 
 class RegisterForm(Form):
-    name = TextField('Your Name')
+    name = TextField('name', validators=[Required()])
 
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
@@ -126,6 +126,8 @@ def register():
     if form.validate_on_submit():
         user = app.db.User.get(session['user_id'])
         user.name = form.name.data
+        app.db.session.commit()
+
         flash('Pleased to meet you, %s!' % form.name.data)
         return redirect(url_for('home'))
 

@@ -5,19 +5,23 @@
 <body>
   <div id='content'>
     <div id='ui'>
-      <h1>Register</h1>
-      Hilo!
-      <form method='POST'>
+      <h1>welcome, stranger</h1>
+      <form method='POST' class='nice'>
         ${form.csrf_token()}
-        <div py:if='form.errors'>There were errors!</div>
+
         <div>
-          ${form.name.label()}
+          <div py:if='form.errors'>There were errors!</div>
+          <label for='name'>What should I call you?</label>
           <py:if test='"name" in form.errors'>
             <div py:for='error in form.errors["name"]'>${error}</div>
           </py:if>
-          ${form.name()}
+          ${form.name(required=True, placeholder='name')}
         </div>
-        <div><input type='submit' value='ok'/></div>
+
+        <div>
+          <input type='submit' value='ok'
+                 class='blue radius nice button' />
+        </div>
       </form>
     </div>
   </div>
