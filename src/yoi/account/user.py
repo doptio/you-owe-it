@@ -7,8 +7,8 @@ from openid.consumer.consumer import Consumer, SUCCESS
 from openid.consumer.discover import DiscoveryFailure
 from openid.extensions import sreg
 
-from dweeb.account.openid_store import MemcacheStore
-from dweeb.flask_genshi import render
+from yoi.account.openid_store import MemcacheStore
+from yoi.flask_genshi import render
 
 bp = Blueprint('account', __name__,
                template_folder='templates')

@@ -11,8 +11,6 @@ def test_index():
     resp = client.get('/')
     assert_eq(resp.status_code, 200)
 
-### FIXME - These belong in the dweeb.account package.
-
 def create_user():
     user = app.db.User(name='toor')
     app.db.session.add(user)
@@ -23,7 +21,7 @@ def create_user():
 
 @contextmanager
 def fake_openid():
-    with patch('dweeb.account.user.make_consumer') as mock:
+    with patch('yoi.account.user.make_consumer') as mock:
         result = mock.return_value.complete.return_value
         result.status = SUCCESS
         result.identity_url = 'http://uowe.it/root'
