@@ -36,28 +36,28 @@
     <h2>recent entries</h2>
     <table>
       <thead>
-        <th>date</th>
+        <th id='date'>date</th>
+        <th id='amount' class='number'>amount</th>
         <th>who</th>
-        <th>amount</th>
         <th>description</th>
       </thead>
 
       <tr>
         <td>2012-06-06</td>
+        <td class='number'>${render_amount(42)}</td>
         <td>mig@ibofobi.dk</td>
-        <td>${render_amount(42)}</td>
         <td>bought something</td>
       </tr>
       <tr>
         <td/>
+        <td class='number'>${render_amount(-21)}</td>
         <td>mig@ibofobi.dk</td>
-        <td>${render_amount(-21)}</td>
         <td/>
       </tr>
       <tr>
         <td/>
+        <td class='number'>${render_amount(-21)}</td>
         <td>car@csis.dk</td>
-        <td>${render_amount(-21)}</td>
         <td/>
       </tr>
     </table>

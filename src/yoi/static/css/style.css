@@ -60,9 +60,17 @@ input[type=number][disabled] {
 
 /* Global styles */
 table {
+    width: 100%;
     border-collapse: collapse;
 }
+table tr:hover,
+table tr:nth-child(even):hover {
+    background-color: #f0f0f0;
+}
 
+.number {
+    text-align: right;
+}
 .red {
     color: red;
 }
@@ -97,6 +105,9 @@ table {
     padding-left: 0;
 }
 
+.entry-editor #victim-list {
+    width: auto;
+}
 .entry-editor #victim-list input[type=range] {
     width: 100%;
 }
@@ -119,9 +130,6 @@ table {
 }
 
 /* The journal page */
-#journal-page table {
-    width: 100%;
-}
 #journal-page #overview li {
     /* h3 sized */
     line-height: 1;
@@ -133,10 +141,14 @@ table {
     margin-right: .4em;
 }
 
-/* The home page */
-#home-page table {
-    width: 75%;
+#journal-page table #date {
+    width: 8em;
 }
+#journal-page table #amount {
+    width: 6em;
+}
+
+/* The home page */
 #home-page td a {
     display: block;
     color: black;

@@ -6,27 +6,32 @@
 <head/>
 <body class='widget-app'>
   <div id='content'>
-    <h1>${g.user.name}'s journals</h1>
-    <table>
-      <tr>
-        <td><h3><a href='journal'>film</a></h3></td>
-        <td><h3><a href='journal'>2012-07-07</a></h3></td>
-        <td><h3><a href='journal'>${render_amount(-32)}</a></h3></td>
-      </tr>
-      <tr>
-        <td><h3><a href='journal'>bio</a></h3></td>
-        <td><h3><a href='journal'>1979-07-09</a></h3></td>
-        <td><h3><a href='journal'>${render_amount(21)}</a></h3></td>
-      </tr>
-      <tr>
-        <td><h3><a href='journal'>frokost</a></h3></td>
-        <td><h3><a href='journal'>2011-11-11</a></h3></td>
-        <td><h3><a href='journal'>${render_amount(-42)}</a></h3></td>
-      </tr>
-    </table>
+    <div class='row'>
+      <div class='eight columns'>
+        <h1>${g.user.name}'s journals</h1>
+        <table>
+          <tr>
+            <td><h3><a href='journal'>film</a></h3></td>
+            <td><h3><a href='journal'>2012-07-07</a></h3></td>
+            <td class='number'><h3><a href='journal'>${render_amount(-32)}</a></h3></td>
+          </tr>
+          <tr>
+            <td><h3><a href='journal'>bio</a></h3></td>
+            <td><h3><a href='journal'>1979-07-09</a></h3></td>
+            <td class='number'><h3><a href='journal'>${render_amount(21)}</a></h3></td>
+          </tr>
+          <tr>
+            <td><h3><a href='journal'>Mallorca 2014</a></h3></td>
+            <td><h3><a href='journal'
+                       title='According to the New Gregorian calendar'>2019-19-19</a></h3></td>
+            <td class='number'><h3><a href='journal'>${render_amount(-42)}</a></h3></td>
+          </tr>
+        </table>
 
-    <a href='#'
-       class='nice large radius button'>Create new journal</a>
+        <a href='#'
+           class='nice large radius button'>Create new journal</a>
+      </div>
+    </div>
   </div>
 </body>
 </html>
