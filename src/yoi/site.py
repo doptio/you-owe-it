@@ -4,7 +4,7 @@ from flask import request, g, redirect, url_for
 
 from yoi.app import app
 from yoi import authentication
-from yoi import loggy
+from yoi import request_log
 from yoi import pages
 from yoi import schema
 
