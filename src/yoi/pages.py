@@ -6,6 +6,7 @@ from flaskext.wtf import Form, TextField, Required, Optional, Email, Length, \
                          FieldList
 from random import randrange
 from sqlalchemy import sql
+from sqlalchemy.exc import IntegrityError
 
 from yoi.app import app
 from yoi.schema import Event, Person
@@ -44,11 +45,16 @@ def settings():
     form = UserSettingsForm(obj=g.user)
 
     if form.validate_on_submit():
-        form.populate_obj(g.user)
-        app.db.session.commit()
+        try:
+            with app.db.session.begin_nested():
+                form.populate_obj(g.user)
+            app.db.session.commit()
 
-        flash('settings saved')
-        return redirect(url_for('home'))
+            flash('settings saved')
+            return redirect(url_for('home'))
+
+        except IntegrityError:
+            form.email.errors.append('Email already taken')
 
     if form.errors:
         flash('settings not saved', 'alert')
