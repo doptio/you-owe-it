@@ -6,12 +6,28 @@
 }
 #top-menu a {
     color: white;
+    display: block;
 }
 #top-menu li {
     display: inline-block;
     /* Override styles from foundation */
     font-size: 20px;
     line-height: 50px;
+}
+
+#top-menu .has-flyout .flyout {
+    display: none;
+    position: absolute;
+    top: 50px;
+}
+#top-menu .has-flyout .flyout li {
+    display: block;
+}
+#top-menu .has-flyout .flyout a {
+    color: black;
+}
+#top-menu .has-flyout:hover .flyout {
+    display: block;
 }
 
 /* Missing HTML5 input styles from foundation */
