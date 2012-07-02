@@ -1,12 +1,13 @@
 from __future__ import unicode_literals, division
 
-from flask import g, request, url_for, redirect, flash
+from flask import g, request, url_for, redirect, flash, jsonify
 from flaskext.genshi import render_response
 from flaskext.wtf import Form, TextField, Required, Optional, Email, Length, \
-                         FieldList
+                         FieldList, IntegerField
 from random import randrange
 from sqlalchemy import sql
 from sqlalchemy.exc import IntegrityError
+from werkzeug.exceptions import BadRequest
 
 from yoi.app import app
 from yoi.schema import Event, Person
@@ -111,7 +112,44 @@ def new_event():
 
     return render_response('new-event.html', {'form': form})
 
-@app.route('/<external_id>/<slug>')
+class EmptyForm(Form):
+    'I am an empty form. Use me to generate CSRF tokens.'
+    pass
+
+@app.route('/<external_id>/<slug>/')
 def event(external_id, slug):
     event = Event.find(external_id)
-    return render_response('event.html', {'event': event})
+    return render_response('event.html', {
+        'event': event,
+        'form': EmptyForm(),
+    })
+
+class JoinEventForm(Form):
+    person = IntegerField('person', validators=[Optional()])
+
+@app.route('/<external_id>/<slug>/join', methods=['POST'])
+def join_event(external_id, slug):
+    form = JoinEventForm()
+
+    if form.validate_on_submit():
+        event = Event.find(external_id)
+        if form.person.data:
+            person = Person.get(form.person.data)
+            if person.event != event.id:
+                request.log.info('person.event != event.id')
+                raise BadRequest()
+            if person.user:
+                request.log.info('person.user != None')
+                raise BadRequest()
+            person.user = g.user.id
+
+        else:
+            person = Person(event=event.id, name=g.user.name, user=g.user.id)
+            app.db.session.add(person)
+
+        app.db.session.commit()
+
+        return jsonify(success=True)
+
+    request.log.info('form not valid: %r', form.errors)
+    raise BadRequest()

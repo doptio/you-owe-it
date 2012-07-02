@@ -8,16 +8,16 @@
     return 'http://www.gravatar.com/avatar/{}?size={}'.format(hash, size)
 ?>
 
-<py:def function='render_avatar_img(user, size=60)'>
-  <img src='${avatar_url(user.email, size=size)}'
+<py:def function='render_avatar_img(person, size=60)'>
+  <img src='${avatar_url(person.email, size=size)}'
        class='avatar-img' width='${size}' height='${size}'
-       alt="${user.name}'s avatar"/>
+       alt="${person.name}'s avatar"/>
 </py:def>
 
-<py:def function='render_avatar(user, size=60)'>
-  <span class='avatar' data-user='${user.id}'>
-    ${render_avatar_img(user, size=size)}<br/>
-    ${user.name}
+<py:def function='render_avatar(person, size=60)'>
+  <span class='avatar' data-person='${person.person_id}'>
+    ${render_avatar_img(person, size=size)}<br/>
+    ${person.name}
   </span>
 </py:def>
 

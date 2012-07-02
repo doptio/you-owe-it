@@ -6,7 +6,7 @@ from werkzeug import cached_property
 from yoi.app import app
 
 # Member is a synthetic object describing the members of events.
-Member = namedtuple('Member', 'id name email amount user_id')
+Member = namedtuple('Member', 'person_id name email amount user_id')
 
 class Event(app.db.Model):
     id = app.db.Column(app.db.Integer, primary_key=True)
@@ -34,9 +34,10 @@ class Event(app.db.Model):
     def members(self):
         rows = (app.db.session
                     .query(Person.id, Person.name,
-                           app.db.User.name, app.db.User.email, app.db.User.id)
+                           app.db.User.name, app.db.User.email,
+                           app.db.User.id)
+                    .outerjoin(app.db.User)
                     .filter(Person.event == self.id)
-                    .filter(app.db.User.id == Person.user)
                     .order_by(Person.name))
         return [Member(row[0], row[1] or row[2], row[3], 0.0, row[4])
                 for row in rows]
@@ -57,3 +58,7 @@ class Person(app.db.Model):
     __table_args__ = (
         UniqueConstraint('event', 'user'),
     )
+
+    @classmethod
+    def get(cls, id):
+        return app.db.session.query(cls).get(id)

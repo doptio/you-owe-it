@@ -20,8 +20,14 @@
              data-dialog='invite-friends' href='#'>Invite friends</a></li>
     </ul>
     <ul class='button-group radius' py:if='not is_member'>
-      <li><a class='large button for-dialog'
-             data-dialog='join' href='#'>Join!</a></li>
+      <li py:if='g.user'>
+        <a class='large button for-dialog'
+           data-dialog='join' href='#'>Join!</a>
+      </li>
+      <li py:if='not g.user'>
+        <a href='${url_for("account.login", r=request.path + "#join")}'
+           class='large button'>Join!</a>
+      </li>
     </ul>
 
     <div class='panel radius'>
@@ -68,7 +74,7 @@
     <div id='add-people' class='dialog'>
       <h1>Add People</h1>
       <p>Enter the names of people to add, one per input:</p>
-      <ol>
+      <ol class='input-fix'>
         <li><input type='text' name='name' placeholder='name'/></li>
       </ol>
     </div>
@@ -80,7 +86,15 @@
         <a href='${request.base_url}'>${request.base_url}</a>
       </div>
     </div>
+
+    <div id='join' class='dialog'>
+      <h1>Select yourself</h1>
+      <ul class='block-grid three-up'>
+        <li py:for='person in event.members' py:if='not person.user_id'>
+          <a href='#'>${render_avatar(person)}</a>
+        </li>
+      </ul>
+    </div>
   </div>
 </body>
 </html>
-

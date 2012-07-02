@@ -73,7 +73,7 @@ $.fn.yoi_entry_editor = function() {
         $('#select-payer .avatar')
             .replaceWith($(this).find('.avatar').clone());
         $('input[name=payer]')
-            .val($(this).data('user'));
+            .val($(this).data('person'));
 
         update_share_descriptions();
     });
@@ -98,10 +98,10 @@ $.fn.yoi_entry_editor = function() {
 
     this.on('click activate', '.toggle-victim', function(ev) {
         ev.preventDefault();
-        var victim = $(this).data('user');
+        var victim = $(this).data('person');
         self.find('.victim').each(function(i, e) {
             var e = $(e);
-            if(e.data('user') != victim)
+            if(e.data('person') != victim)
                 return;
             if(e.filter(':visible').length > 0)
                 e.find('input[name=shares]').val(0);
@@ -114,7 +114,7 @@ $.fn.yoi_entry_editor = function() {
     });
 
     var payer = $('input[name=payer]').val()
-    $('.toggle-victim[data-user=' + payer + ']').click();
+    $('.toggle-victim[data-person=' + payer + ']').click();
 
     update_share_descriptions();
 };
@@ -149,6 +149,58 @@ $(document).ready(function() {
     $(document).on('click activate', '.for-dialog', function(ev) {
         ev.preventDefault();
         dialogs[$(this).data('dialog')].dialog('open');
+    });
+
+    console.log(document.location.hash);
+    if(document.location.hash.length > 0) {
+        var name = document.location.hash.substring(1);
+        $('.for-dialog[data-dialog=' + name + ']').click();
+    }
+});
+
+var Yoi = {};
+
+Yoi.ajax_error_handler = function() {
+    alert('Ajax request failed. I do not know what to do <_<');
+};
+
+/* Magic for "Join Event" dialog */
+$(document).ready(function() {
+    function ajax_join(person_id) {
+        $.ajax({
+            url: 'join',
+            data: {
+                csrf_token: csrf_token,
+                person: person_id || ''
+            },
+            type: 'POST',
+            success: function(r) {
+                $('#join').dialog('close');
+            },
+            error: Yoi.ajax_error_handler
+        });
+    }
+
+    $('.for-dialog[data-dialog=join]').on('click activate', function(ev) {
+        ev.preventDefault();
+        if($('#join').find('li').length == 0) {
+            ev.stopPropagation();
+            ajax_join();
+        }
+    });
+    $('#join').on('dialogclose', function(ev) {
+        document.location.replace(document.location.pathname);
+    });
+
+    $('#join').dialog('option', 'buttons', {
+        'I am someone else!': function() {
+            ajax_join();
+        }
+    });
+
+    $('#join').on('click activate', 'a', function(ev) {
+        ev.preventDefault();
+        ajax_join($(this).find('.avatar').data('person'));
     });
 });
 
