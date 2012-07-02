@@ -2,6 +2,8 @@
 
 # Deploy to Heroku.
 
+cd `dirname $0`/..
+
 git push -f heroku HEAD:master
 
 heroku run bin/post-update
