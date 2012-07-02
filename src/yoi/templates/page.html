@@ -42,7 +42,9 @@
           </div>
           <div class='four columns'>
             <ul class='right'>
-              <li py:if='g.user'><a href='/home'>${g.user.email}</a></li>
+              <li py:if='g.user'><a href='/home'>home</a></li>
+              <li py:if='g.user'><a href='/settings'>settings</a></li>
+              <li py:if='g.user'><a href='/logout'>logout</a></li>
               <li py:if='not g.user'><a href='/login'>login</a></li>
             </ul>
           </div>

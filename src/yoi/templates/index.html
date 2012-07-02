@@ -5,13 +5,6 @@
 <body class='widget-app'>
   <div id='content'>
     <h1>nothing to see here, move along</h1>
-    <div id='ui' py:if='False'>
-      <h1>yoi</h1>
-      <p py:if='g.user'>Hello ${g.user.name}, would you like to
-      <a href='${url_for("account.logout")}'>logout</a>?</p>
-      <p py:if='not g.user'>Hello stranger, would you like to
-      <a href='${url_for("account.login")}'>login</a>?</p>
-    </div>
   </div>
 </body>
 </html>

@@ -3,12 +3,15 @@ from __future__ import unicode_literals, division
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 
+from yoi.account.user import bp as account
 from yoi.config import secret, testing, database_url, use_debugger
 from yoi.flask_genshi import Genshi
 
 app = Flask(__name__)
 genshi = Genshi(app)
 app.db = SQLAlchemy(app)
+
+app.register_blueprint(account)
 
 # FIXME - Use app.config.from_object
 app.config['DEBUG'] = True

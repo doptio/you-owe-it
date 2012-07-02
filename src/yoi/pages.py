@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, url_for
 from flaskext.genshi import render_response
 
 from yoi.app import app
@@ -10,6 +10,10 @@ def index():
 @app.route('/home')
 def home():
     return render_response('home.html')
+
+@app.route('/settings')
+def settings():
+    return render_response('settings.html')
 
 @app.route('/journal')
 def journal():

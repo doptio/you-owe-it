@@ -9,6 +9,9 @@
 #top-menu a {
     color: white;
 }
+#top-menu li {
+    display: inline-block;
+}
 
 /* Global styles */
 input {
