@@ -59,6 +59,10 @@ input[type=number][disabled] {
 }
 
 /* Global styles */
+table {
+    border-collapse: collapse;
+}
+
 .red {
     color: red;
 }
