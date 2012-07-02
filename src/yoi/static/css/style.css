@@ -1,8 +1,6 @@
 /* Styles for elements in page template */
 #top-menu {
     height: 50px;
-    font-size: 20px;
-    line-height: 50px;
     background-color: black;
     margin-bottom: 20px;
 }
@@ -11,20 +9,12 @@
 }
 #top-menu li {
     display: inline-block;
+    /* Override styles from foundation */
+    font-size: 20px;
+    line-height: 50px;
 }
 
 /* Global styles */
-input {
-    margin: 0;
-    padding: .4em;
-    border: thin solid #a9a9a9;
-    border-radius: 3px;
-}
-
-.large.button {
-    margin: 1em 0;
-}
-
 .red {
     color: red;
 }
@@ -32,10 +22,8 @@ input {
     color: green;
 }
 
-/* Random bunch of styles */
-.avatar-img {
-    vertical-align: middle;
-    border-radius: 3px;
+.dialog {
+    display: none;
 }
 
 .avatar {
@@ -43,7 +31,12 @@ input {
     display: inline-block;
     width: 110px;
 }
+.avatar-img {
+    vertical-align: middle;
+    border-radius: 3px;
+}
 
+/* Entry editor styling */
 .entry-editor table {
     /* Override foundation's table styling. */
     border: none;
@@ -56,6 +49,28 @@ input {
     padding-left: 0;
 }
 
+.entry-editor #victim-list input[type=range] {
+    width: 100%;
+}
+
+.entry-editor #user-selector {
+    position: absolute;
+    background-color: white;
+    border: 1px solid gray;
+    width: 130px;
+    text-align: center;
+    border-radius: 3px;
+    z-index: 100;
+}
+.entry-editor #user-selector .select-user {
+    margin: 20px 0;
+}
+.entry-editor #user-selector .select-user:nth-child(even) {
+    background-color: #f9f9f9;
+    border-radius: 3px;
+}
+
+/* The journal page */
 #journal-page table {
     width: 100%;
 }
@@ -70,35 +85,11 @@ input {
     margin-right: .4em;
 }
 
+/* The home page */
 #home-page table {
     width: 75%;
 }
 #home-page td a {
     display: block;
     color: black;
-}
-
-#victim-list input[type=range] {
-    width: 100%;
-}
-
-#user-selector {
-    position: absolute;
-    background-color: white;
-    border: 1px solid gray;
-    width: 130px;
-    text-align: center;
-    border-radius: 3px;
-    z-index: 100;
-}
-#user-selector .select-user {
-    margin: 20px 0;
-}
-#user-selector .select-user:nth-child(even) {
-    background-color: #f9f9f9;
-    border-radius: 3px;
-}
-
-.dialog {
-    display: none;
 }
