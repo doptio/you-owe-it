@@ -10,13 +10,6 @@
     <form method='POST' action='${url_for("settings")}'>
       ${form.csrf_token}
 
-      <py:def function='render_field(field, **kwargs)'>
-        <ul py:if='field.errors' class='errors'>
-          <li py:for='error in field.errors'>${error}</li>
-        </ul>
-        ${field(**kwargs)}
-      </py:def>
-
       <h3>What name would you like to be known by?</h3>
       ${render_field(form.name, placeholder='name', autofocus=True,
                      required=True, min=3, max=15)}
