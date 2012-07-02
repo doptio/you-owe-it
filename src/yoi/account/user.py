@@ -58,7 +58,9 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         realm = url_for('index', _external=True)
-        return_to = url_for('.openid_return', _external=True)
+        return_to = url_for('.openid_return',
+                            r=request.args.get('r', '/home'),
+                            _external=True)
 
         try:
             auth_req = make_consumer().begin(form.openid.data)
@@ -94,7 +96,7 @@ def openid_return():
 
     if user:
         session['user_id'] = user.id
-        return redirect(url_for('home'))
+        return redirect(request.args['r'])
 
     extra = sreg.SRegResponse.fromSuccessResponse(result)
     if extra:
@@ -119,7 +121,7 @@ def openid_return():
 
     if name:
         flash('Welcome, %s!' % name)
-    return redirect(url_for('.register'))
+    return redirect(url_for('.register', r=request.args['r']))
 
 class RegisterForm(Form):
     name = TextField('name', validators=[Required()])
@@ -136,7 +138,7 @@ def register():
         app.db.session.commit()
 
         flash('Pleased to meet you, %s!' % form.name.data)
-        return redirect(url_for('home'))
+        return redirect(request.args['r'])
 
     return render('account/register.html', form=form)
 
