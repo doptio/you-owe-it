@@ -1,5 +1,5 @@
 <html xmlns:py="http://genshi.edgewall.org/"
-      xmlns:xi="http://www.w3.org/2001/XInclude">
+ radius      xmlns:xi="http://www.w3.org/2001/XInclude">
 
 <?python from datetime import datetime?>
 
@@ -13,7 +13,7 @@
       <h1>add new entry</h1>
 
       <form action='journal' class='entry-editor'>
-        <div class='panel'>
+        <div class='panel radius'>
           <ul class='block-grid three-up'>
             <li>
               <label>
@@ -57,7 +57,7 @@
           </ul>
         </div>
 
-        <div class='panel'>
+        <div class='panel radius'>
           <h2>victims</h2>
           <ul class='block-grid five-up'>
             <li py:for='user in users'>
