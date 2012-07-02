@@ -2,6 +2,7 @@ from flask import Blueprint, redirect, url_for, flash
 from flask import current_app as app, request, g, session
 from flask.ext.wtf import Form, TextField, Required
 from sqlalchemy import Column, Integer, String
+from werkzeug import cached_property
 
 from openid.consumer.consumer import Consumer, SUCCESS
 from openid.consumer.discover import DiscoveryFailure
@@ -34,6 +35,10 @@ def database_setup(state):
         @classmethod
         def get(cls, user_id):
             return app.db.session.query(cls).get(user_id)
+
+        @cached_property
+        def active_events(self):
+            return []
 
     class OpenId(db.Model):
         openid = db.Column(db.String, primary_key=True)

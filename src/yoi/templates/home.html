@@ -2,18 +2,26 @@
       xmlns:xi="http://www.w3.org/2001/XInclude"
       id='home-page'>
 <xi:include href='page.html'/>
-<xi:include href='data.xml'/>
 <head/>
 <body class='widget-app'>
   <div id='content'>
     <div class='row'>
       <div class='eight columns'>
-        <h1>${g.user.name}'s journals</h1>
-        <table>
-          <tr>
-            <td><h3><a href='journal'>film</a></h3></td>
-            <td><h3><a href='journal'>2012-07-07</a></h3></td>
-            <td class='number'><h3><a href='journal'>${render_amount(-32)}</a></h3></td>
+        <h1>${g.user.name}'s events</h1>
+
+        <p py:if='not events'>Welcome, ${g.user.name}! You don't seem to have
+        any events right now, maybe you would like to <a href='/tour'>take the
+        introductory tour?</a> Or just get started right away, and <a
+        href='/new-event'>create a new event</a>?</p>
+
+        <table py:if='events'>
+          <tr py:for='event in events'>
+            <td><h3><a href='${event.url_for}'>${event.name}</a></h3></td>
+            <td><h3><a title='According to the New Mayan calendar'
+                       href='${event.url_for}'>2019-19-19</a></h3></td>
+            <td class='number'><h3><a href='${event.url_for}'>
+              ${render_amount(0.0)}
+            </a></h3></td>
           </tr>
           <tr>
             <td><h3><a href='journal'>bio</a></h3></td>
@@ -28,11 +36,9 @@
           </tr>
         </table>
 
-        <a href='#'
-           class='nice large radius button'>Create new journal</a>
+        <a href='/new-event' class='large button'>Create new event</a>
       </div>
     </div>
   </div>
 </body>
 </html>
-

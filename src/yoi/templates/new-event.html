@@ -1,0 +1,30 @@
+<html xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      id='new-event-page'>
+<xi:include href='page.html'/>
+<head/>
+<body>
+  <div id='content' class='row'>
+    <div class='six columns centered'>
+      <h1>new event</h1>
+
+      <form method='POST' action='${url_for("new_event")}'>
+        ${form.csrf_token}
+
+        <h3>What is the name of the event?</h3>
+        ${render_field(form.name,
+                       autofocus=True, placeholder='event name',
+                       required=True, min=3, max=20)}
+
+        <h3>Other people to add</h3>
+        <p>More people can be added later.</p>
+        <ol class='input-fix'>
+          <li><input type='text' name='people' placeholder='name'/></li>
+        </ol>
+
+        <input type='submit' class='button' value='Create event'/>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

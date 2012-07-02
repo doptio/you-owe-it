@@ -61,6 +61,14 @@ input[type=number][disabled] {
     background-color: #ddd;
 }
 
+/* Work-around for bug in Foundation when inputs are inside lists. */
+.input-fix li {
+    list-style-position: outside;
+}
+.input-fix li input {
+    display: inline-block !important;
+}
+
 /* Take advantage of HTML5 form validation to make user aware of inputs that
  * need attention. */
 input:focus:invalid {

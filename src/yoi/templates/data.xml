@@ -1,11 +1,6 @@
 <xml xmlns:py="http://genshi.edgewall.org/" py:strip=''>
 <?python
   from collections import namedtuple
-  from hashlib import md5
-
-  def avatar_url(email, size=60):
-    hash = md5(email.lower()).hexdigest()
-    return 'http://www.gravatar.com/avatar/{}?size={}'.format(hash, size)
 
   User = namedtuple('User', 'id email amount name')
 

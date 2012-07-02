@@ -1,5 +1,13 @@
 <xml xmlns:py="http://genshi.edgewall.org/" py:strip=''>
 
+<?python
+  from hashlib import md5
+
+  def avatar_url(email, size=60):
+    hash = md5((email or '').lower()).hexdigest()
+    return 'http://www.gravatar.com/avatar/{}?size={}'.format(hash, size)
+?>
+
 <py:def function='render_avatar_img(user, size=60)'>
   <img src='${avatar_url(user.email, size=size)}'
        class='avatar-img' width='${size}' height='${size}'
