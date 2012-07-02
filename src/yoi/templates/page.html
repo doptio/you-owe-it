@@ -32,6 +32,24 @@
 </py:match>
 <py:match path="body" once="true">
   <body py:attrs="select('@*')">
+    <div id='top-menu'>
+      <div class='container'>
+        <div class='row'>
+          <div class='eight columns'>
+            <ul class='left'>
+              <li><a href='/'>yoi</a></li>
+            </ul>
+          </div>
+          <div class='four columns'>
+            <ul class='right'>
+              <li py:if='g.user'><a href='/home'>${g.user.email}</a></li>
+              <li py:if='not g.user'><a href='/login'>login</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div id='ui' class='container'>
       <div py:for='message in get_flashed_messages()'>${message}</div>
       <div class='row'>

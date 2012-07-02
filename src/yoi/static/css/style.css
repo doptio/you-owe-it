@@ -1,3 +1,16 @@
+/* Styles for elements in page template */
+#top-menu {
+    height: 50px;
+    font-size: 20px;
+    line-height: 50px;
+    background-color: black;
+    margin-bottom: 20px;
+}
+#top-menu a {
+    color: white;
+}
+
+/* Global styles */
 input {
     padding: .4em;
     border: thin solid #a9a9a9;
@@ -15,6 +28,7 @@ input {
     color: green;
 }
 
+/* Random bunch of styles */
 .avatar-img {
     vertical-align: middle;
     border-radius: 3px;
