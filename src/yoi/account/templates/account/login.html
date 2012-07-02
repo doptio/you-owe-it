@@ -14,16 +14,17 @@
           <py:if test='"openid" in form.errors'>
             <div py:for='error in form.errors["openid"]'>${error}</div>
           </py:if>
-          ${form.openid()}
+          ${form.openid(**{'class': 'six'})}
         </div>
-        <div><input type='submit' value='login'/></div>
+        <div><input type='submit' value='login with openid'
+                    class='button'/></div>
       </form>
 
       <form method='POST'>
         ${form.csrf_token()}
         <input type='hidden' name='openid'
                value='https://www.google.com/accounts/o8/id'/>
-        <input type='submit' value='login with gmail'/>
+        <input type='submit' value='login with gmail' class='button'/>
       </form>
     </div>
   </div>

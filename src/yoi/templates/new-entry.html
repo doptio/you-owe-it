@@ -37,6 +37,7 @@
                 <h2>date</h2>
                 <input type='date' name='date'
                        required='required'
+                       class='eight'
                        value='${datetime.utcnow().strftime("%Y-%m-%d")}'/>
               </label>
             </li>
@@ -45,6 +46,7 @@
               <label>
                 <h2>amount</h2>
                 <input type='number' name='amount' value='0'
+                       class='eight'
                        min='1' required='required'/>
               </label>
               <label>

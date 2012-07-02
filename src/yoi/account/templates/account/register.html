@@ -15,7 +15,9 @@
           <py:if test='"name" in form.errors'>
             <div py:for='error in form.errors["name"]'>${error}</div>
           </py:if>
-          ${form.name(required=True, placeholder='name')}
+          ${form.name(required=True,
+                      placeholder='name',
+                      **{'class': 'six'})}
         </div>
 
         <div>
