@@ -58,9 +58,13 @@
     </div>
 
     <div id='ui' class='container'>
-      <div py:for='message in get_flashed_messages()'>${message}</div>
       <div class='row'>
         <div class='twelve columns'>
+          <div class='alert-box' py:for='message in get_flashed_messages()'>
+            ${message}
+            <a href="" class="close">&times;</a>
+          </div>
+
           ${select("//*[@id='content']")}
         </div>
       </div>
