@@ -60,7 +60,8 @@
     <div id='ui' class='container'>
       <div class='row'>
         <div class='twelve columns'>
-          <div class='alert-box' py:for='message in get_flashed_messages()'>
+          <div py:for='category, message in get_flashed_messages(with_categories=True)'
+               class='alert-box ${category}'>
             ${message}
             <a href="" class="close">&times;</a>
           </div>

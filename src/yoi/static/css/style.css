@@ -58,6 +58,12 @@ input[type=number][disabled] {
     background-color: #ddd;
 }
 
+/* Take advantage of HTML5 form validation to make user aware of inputs that
+ * need attention. */
+input:focus:invalid {
+    border-color: red !important;
+}
+
 /* Global styles */
 table {
     width: 100%;
@@ -90,6 +96,12 @@ table tr:nth-child(even):hover {
 .avatar-img {
     vertical-align: middle;
     border-radius: 3px;
+}
+
+ul.errors li {
+    list-style: none;
+    background: 0% 50% no-repeat url(../images/exclamation-24x24.png);
+    padding-left: 32px;
 }
 
 /* Entry editor styling */

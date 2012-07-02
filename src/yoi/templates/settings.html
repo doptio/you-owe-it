@@ -7,8 +7,18 @@
 <body class='widget-app'>
   <div id='content'>
     <h1>account settings</h1>
-    <p>sorry, nothing here yet</p>
+    <form method='POST' action='${url_for("settings")}'>
+      ${form.csrf_token}
+
+      <p>What name would you like to be known by?</p>
+      <ul py:if='form.name.errors' class='errors'>
+        <li py:for='error in form.name.errors'>${error}</li>
+      </ul>
+      ${form.name(placeholder='name', required=True, max=15, autofocus=True,
+                  class_='in-error' if 'name' in form.name.errors else '')}
+
+      <input type='submit' class='button' value='save settings'/>
+    </form>
   </div>
 </body>
 </html>
-
