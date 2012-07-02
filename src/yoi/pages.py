@@ -10,6 +10,10 @@ from yoi.app import app
 def index():
     return render_response('index.html')
 
+@app.route('/tour')
+def tour():
+    return render_response('tour.html')
+
 @app.route('/home')
 def home():
     return render_response('home.html')
