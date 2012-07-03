@@ -12,5 +12,6 @@ lxml==2.3
 psycopg2==2.4.2
 pylibmc==1.2.2
 python-openid==2.2.5
+translitcodec==0.3
 wsgi-lite==0.5a2
 wsgiref==0.1.2
