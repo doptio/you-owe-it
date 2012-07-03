@@ -2,13 +2,18 @@
       xmlns:xi="http://www.w3.org/2001/XInclude">
 
 <?python
-  from datetime import datetime
-
   people = event.members
 
   user_person, = [person
                   for person in people
                   if person.user_id == g.user.id]
+
+  # FIXME - figure out where the flying fuck dict got bound to some random
+  # value.
+  dict = type({})
+  victims = dict((person, share)
+                 for person, share in zip(form.victims.data, form.shares.data)
+                 if share > 0)
 ?>
 
 <xi:include href='page.html'/>
@@ -51,27 +56,40 @@
             <li>
               <label>
                 <h2>date</h2>
-                <input type='date' name='date'
-                       required='required'
-                       class='eight'
-                       value='${datetime.utcnow().strftime("%Y-%m-%d")}'/>
+                ${render_field(form.date,
+                               required=True,
+                               type='date', class_='eight',
+                               tabindex=3)}
               </label>
             </li>
 
             <li>
               <label>
                 <h2>amount</h2>
-                <input type='number' name='amount' value='0'
-                       class='eight'
-                       autofocus='autofocus'
-                       min='1' required='required'/>
+                ${render_field(form.amount,
+                               type='number', class_='eight',
+                               autofocus=True, required=True,
+                               min=1, placeholder='how much did you spend?',
+                               tabindex=1)}
               </label>
               <label>
-                <input type='checkbox' name='manual-entry'/>
+                ${render_field(form.manual_entry)}
                 enter per-victim amounts manually
               </label>
             </li>
           </ul>
+
+          <div class='row'>
+            <div class='eight columns offset-by-four'>
+              <label>
+                <h2>description</h2>
+                ${render_field(form.description,
+                               required=True,
+                               placeholder='what did you buy this time?!',
+                               tabindex=2)}
+              </label>
+            </div>
+          </div>
         </div>
 
         <div class='panel radius'>
@@ -88,14 +106,17 @@
           <table id='victim-list'>
             <tr py:for='person in people' class='victim'
                 data-person='${person.person_id}'
-                style='display: none;'>
+                style='${"display: none;"
+                         if person.person_id not in victims
+                         else ""}'>
               <td>${render_avatar(person)}</td>
               <td>
                 <div>
-                  <input type='hidden' name='victim'
+                  <input type='hidden' name='victims'
                          value='${person.person_id}'/>
-                  <input type='range' value='0' min='0' max='10'
-                         name='shares'/>
+                  <input type='range' min='0' max='10'
+                         name='shares'
+                         value='${victims.get(person.person_id, 0)}'/>
                 </div>
                 <div class='preview'/>
               </td>

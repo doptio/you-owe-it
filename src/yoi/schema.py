@@ -1,6 +1,7 @@
 from collections import namedtuple
 from flask import url_for
-from sqlalchemy import Column, Integer, String, ForeignKey, UniqueConstraint
+from sqlalchemy import Column, Integer, String, \
+                       CheckConstraint, ForeignKey, UniqueConstraint
 import translitcodec  # imported to get the translit/long encoding
 from werkzeug import cached_property
 
@@ -82,3 +83,33 @@ class Person(app.db.Model):
     @classmethod
     def get(cls, id):
         return app.db.session.query(cls).get(id)
+
+class Entry(app.db.Model):
+    id = app.db.Column(app.db.Integer, primary_key=True)
+    date = app.db.Column(app.db.Date, nullable=False)
+    event = app.db.Column(app.db.Integer, ForeignKey('event.id'),
+                          nullable=False)
+    payer = app.db.Column(app.db.Integer, ForeignKey('person.id'),
+                          nullable=False)
+    description = app.db.Column(app.db.String, nullable=False)
+
+    # We don't need manual_entry in the backend, but we store it so the
+    # frontend 'edit entry' UI can recreate the original entry state.
+    manual_entry = app.db.Column(app.db.Boolean, nullable=False)
+    # Amounts are stored with cents precision, so we store them as integers.
+    amount = app.db.Column(app.db.Integer,
+                           CheckConstraint('amount > 0'), nullable=False)
+
+class EntryVictim(app.db.Model):
+    id = app.db.Column(app.db.Integer, primary_key=True)
+
+    entry = app.db.Column(app.db.Integer, ForeignKey('entry.id'),
+                          nullable=False)
+    victim = app.db.Column(app.db.Integer, ForeignKey('person.id'),
+                           nullable=False)
+    share = app.db.Column(app.db.Integer,
+                          CheckConstraint('share > 0'), nullable=False)
+
+    __table_args__ = (
+        UniqueConstraint('entry', 'victim'),
+    )

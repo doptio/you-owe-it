@@ -15,7 +15,10 @@
     <ul class='button-group radius' py:if='is_member'>
       <li><a class='large button for-dialog'
              data-dialog='add-people' href='#'>Add people</a></li>
-      <li><a class='large button' href='new-entry'>Add entry</a></li>
+      <li><a class='large button'
+             href='${url_for("new_entry",
+                             external_id=event.external_id,
+                             slug=event.slug)}'>Add entry</a></li>
       <li><a class='large button for-dialog'
              data-dialog='invite-friends' href='#'>Invite friends</a></li>
     </ul>

@@ -1,11 +1,12 @@
 var formatAmount = function(amt) {
-    return (amt >= 0 ? '+' : '') + amt.toFixed(2);
+    // FIXME -- should wrap in .red/.green
+    return amt >= 0 ? '+ ' + amt.toFixed(2) : '− ' + (-amt).toFixed(2);
 };
 $.fn.yoi_entry_editor = function() {
     var self = this;
 
     var update_share_descriptions = function() {
-        if(self.find('input[name=manual-entry]').attr('checked'))
+        if(self.find('input[name=manual_entry]').attr('checked'))
             update_share_descriptions_manual();
         else
             update_share_descriptions_automatic();
@@ -41,6 +42,8 @@ $.fn.yoi_entry_editor = function() {
 
             if(victim == payer)
                 amount += amount_total;
+            if(amount.toString() == 'NaN')
+                amount = 0;
 
             var text = '(' + shares + ' shares ~ '
                            + percentage.toFixed(0) + '% ~ '
@@ -78,7 +81,7 @@ $.fn.yoi_entry_editor = function() {
         update_share_descriptions();
     });
 
-    self.on('change', 'input[name=manual-entry]', function(ev) {
+    self.on('change', 'input[name=manual_entry]', function(ev) {
         var amount_readonly = this.checked,
             shares_type = this.checked ? 'number' : 'range',
             shares_max = this.checked ? undefined : 10;
@@ -105,7 +108,7 @@ $.fn.yoi_entry_editor = function() {
                 return;
             if(e.filter(':visible').length > 0)
                 e.find('input[name=shares]').val(0);
-            else if(! self.find('input[name=manual-entry]').attr('checked'))
+            else if(! self.find('input[name=manual_entry]').attr('checked'))
                 e.find('input[name=shares]').val(1);
             e.toggle();
         });
@@ -114,7 +117,6 @@ $.fn.yoi_entry_editor = function() {
     });
 
     var payer = $('input[name=payer]').val()
-    $('.toggle-victim[data-person=' + payer + ']').click();
 
     update_share_descriptions();
 };

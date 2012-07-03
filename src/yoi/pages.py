@@ -1,16 +1,18 @@
 from __future__ import unicode_literals, division
 
+from datetime import date
 from flask import g, request, url_for, redirect, flash, jsonify
 from flaskext.genshi import render_response
 from flaskext.wtf import Form, TextField, Required, Optional, Email, Length, \
-                         FieldList, IntegerField
+                         Field, IntegerField, BooleanField, \
+                         DecimalField, NumberRange, DateField
 from random import randrange
 from sqlalchemy import sql
 from sqlalchemy.exc import IntegrityError
 from werkzeug.exceptions import BadRequest
 
 from yoi.app import app
-from yoi.schema import Event, Person
+from yoi.schema import Event, Person, Entry, EntryVictim
 
 @app.route('/')
 def index():
@@ -29,6 +31,19 @@ def home():
                 .order_by(Event.name)
                 .all())
     return render_response('home.html', {'events': events})
+
+class ListOf(Field):
+    'I am a pseudo-field that can only parse incoming form data.'
+
+    def __init__(self, unbound_field, **kwargs):
+        super(ListOf, self).__init__(**kwargs)
+        self.subfield = unbound_field.bind(form=None, name='')
+
+    def process(self, formdata):
+        self.data = []
+        for data in formdata.getlist(self.name):
+            self.subfield.process_formdata([data])
+            self.data.append(self.subfield.data)
 
 class UserSettingsForm(Form):
     name = TextField('name', validators=[
@@ -67,7 +82,7 @@ class NewEventForm(Form):
         Required(),
         Length(min=3, max=20),
     ])
-    people = FieldList(TextField('name', validators=[Optional()]))
+    people = ListOf(TextField('name', validators=[Optional()]))
 
 def random_identifier():
     # FIXME - disallow identifiers that do not start with a number?
@@ -147,17 +162,63 @@ def join_event(external_id, slug):
     raise BadRequest()
 
 class NewEntryForm(Form):
-    pass
+    payer = IntegerField(validators=[Required()])
+    date = DateField(default=date.today, validators=[Required()])
+    description = TextField(validators=[Required()])
+    manual_entry = BooleanField()
+    amount = DecimalField(validators=[Required(), NumberRange(min=1)])
 
-@app.route('/<external_id>/<slug>/new-entry', methods=['GET', 'POST'])
+    victims = ListOf(IntegerField())
+    shares = ListOf(DecimalField())
+
+    def validate_payer(self, field):
+        if field.data not in self.valid_people:
+            raise ValueError('unknown person')
+
+    def post_validate(self, form, validation_stopped):
+        if len(form.victims.data) != len(form.shares.data):
+            raise ValueError('len(victims) != len(shares)')
+
+        for victim in form.victims.data:
+            if victim not in form.valid_people:
+                raise ValueError('unknown person')
+
+def create_entry(event, form):
+    entry = Entry()
+    entry.event = event.id
+    entry.payer = form.payer.data
+    entry.date = form.date.data
+    entry.description = form.description.data
+    entry.manual_entry = form.manual_entry.data
+    entry.amount = int(form.amount.data * 100)
+    app.db.session.add(entry)
+    app.db.session.flush()
+
+    for victim, share in zip(form.victims.data, form.shares.data):
+        share = int(share * 100)
+        if not share:
+            continue
+        app.db.session.add(EntryVictim(entry=entry.id,
+                                       victim=victim,
+                                       share=share))
+
+@app.route('/<external_id>/<slug>/entry/', methods=['GET', 'POST'])
 def new_entry(external_id, slug):
     event = Event.find(external_id)
 
+    request.log.debug('data: %r', request.form)
     form = NewEntryForm()
+    # used by field validators -- FIXME is this kosher?
+    form.valid_people = [person.person_id for person in event.members]
     if form.validate_on_submit():
-        flash('not implemented yet')
+        create_entry(event, form)
+        app.db.session.commit()
+
+        flash('entry added')
+        return redirect(event.url_for)
 
     if form.errors:
-        flash('event not created', 'alert')
+        request.log.debug('form errors: %r', form.errors)
+        flash('entry not added', 'alert')
 
     return render_response('new-entry.html', {'form': form, 'event': event})
