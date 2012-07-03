@@ -35,7 +35,7 @@
           <ul class='block-grid three-up'>
             <li>
               <label>
-                <h2>payer</h2>
+                <h2>select payer</h2>
                 <a href='#' id='payer-avatar'
                    class='for-dialog' data-dialog='select-payer'>
                   ${render_avatar(user_person)}
@@ -86,7 +86,7 @@
         </div>
 
         <div class='panel radius'>
-          <label><h2>victims</h2></label>
+          <label><h2>select victims</h2></label>
 
           <ul py:if='form.victims.errors' class='errors'>
             <li py:for='error in form.victims.errors'>${error}</li>
