@@ -118,6 +118,24 @@ def all_entries(external_id, slug):
     event = Event.find(external_id)
     return render_response('all-entries.html', {'event': event})
 
+class AddPeopleForm(Form):
+    people = ListOf(TextField())
+
+@app.route('/<external_id>/<slug>/add-people', methods=['POST'])
+def add_people(external_id, slug):
+    event = Event.find(external_id)
+    form = AddPeopleForm()
+
+    if form.validate_on_submit():
+        for person in form.people.data:
+            app.db.session.add(Person(event=event.id, name=person))
+        app.db.session.commit()
+
+        return jsonify(success=True)
+
+    request.log.info('form not valid: %r', form.errors)
+    raise BadRequest()
+
 class JoinEventForm(Form):
     person = IntegerField('person', validators=[Optional()])
 

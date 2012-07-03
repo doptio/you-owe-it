@@ -171,6 +171,24 @@ $(document).ready(function() {
 
 var Yoi = {};
 
+Yoi.ajax = function(opts) {
+    var defaults = {
+        error: Yoi.ajax_error_handler,
+        traditional: true
+    };
+    var opts = $.extend({}, defaults, opts);
+    if(opts.type == 'POST')
+        opts.data = $.extend({}, opts.data, {csrf_token: csrf_token});
+    return $.ajax(opts);
+};
+Yoi.post = function(url, data, success) {
+    return Yoi.ajax({
+        type: 'POST',
+        url: url,
+        data: data,
+        success: success
+    });
+};
 Yoi.ajax_error_handler = function() {
     alert('Ajax request failed. I do not know what to do <_<');
 };
@@ -178,18 +196,9 @@ Yoi.ajax_error_handler = function() {
 /* Magic for "Join Event" dialog */
 $(document).ready(function() {
     function ajax_join(person_id) {
-        $.ajax({
-            url: 'join',
-            data: {
-                csrf_token: csrf_token,
-                person: person_id || ''
-            },
-            type: 'POST',
-            success: function(r) {
-                $('#join').dialog('close');
-            },
-            error: Yoi.ajax_error_handler
-        });
+        Yoi.post('join',
+                 {person: person_id || ''},
+                 function() { document.location.reload() });
     }
 
     $('.for-dialog[data-dialog=join]').on('click activate', function(ev) {
@@ -221,11 +230,18 @@ $(document).ready(function() {
         /* Reset dialog when opening */
         $(this)
             .find('li:not(:first-child)').remove().end()
-            .find('li input').val('');
+            .find('li input').val('').focus().end();
+    });
+
+    $('#add-people').on('keyup', 'input', function(ev) {
+        if(ev.keyCode == 13)
+            $('.ui-dialog:has(#add-people)').find('button').click();
     });
 
     $('#add-people').on('dialog-ok', function() {
-        /* FIXME - Submit form! */
-        console.log($('#add-people').find('input[value!=]'));
+        var people = $.map($('#add-people').find('input[value!=]'),
+                           function(e) { return e.value });
+        Yoi.post('add-people', {people: people},
+                 function() { document.location.reload() });
     });
 });
