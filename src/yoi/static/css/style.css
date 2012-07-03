@@ -135,7 +135,7 @@ ul.errors li {
     width: 100%;
 }
 
-.entry-editor #user-selector {
+.entry-editor #person-selector {
     position: absolute;
     background-color: white;
     border: 1px solid gray;
@@ -144,10 +144,10 @@ ul.errors li {
     border-radius: 3px;
     z-index: 100;
 }
-.entry-editor #user-selector .select-user {
+.entry-editor #person-selector .select-user {
     margin: 20px 0;
 }
-.entry-editor #user-selector .select-user:nth-child(even) {
+.entry-editor #person-selector .select-user:nth-child(even) {
     background-color: #f9f9f9;
     border-radius: 3px;
 }

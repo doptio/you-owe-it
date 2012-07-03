@@ -1,33 +1,49 @@
 <html xmlns:py="http://genshi.edgewall.org/"
       xmlns:xi="http://www.w3.org/2001/XInclude">
 
-<?python from datetime import datetime?>
+<?python
+  from datetime import datetime
+
+  people = event.members
+
+  user_person, = [person
+                  for person in people
+                  if person.user_id == g.user.id]
+?>
 
 <xi:include href='page.html'/>
-<xi:include href='data.xml'/>
 
 <head/>
 <body class='widget-app'>
   <div id='content'>
     <div>
-      <h1>add new entry</h1>
+      <h1>${event.name} &ndash; add entry</h1>
 
-      <form action='journal' class='entry-editor'>
+      <form method='POST'
+            action='${url_for("new_entry",
+                              external_id=event.external_id,
+                              slug=event.slug)}'
+            class='entry-editor'>
+        ${form.csrf_token}
+
         <div class='panel radius'>
           <ul class='block-grid three-up'>
             <li>
               <label>
                 <h2>payer</h2>
-                <a href='#' id='select-payer'>${render_avatar(user)}</a>
-                <input type='hidden' name='payer' value='${user.id}'
+                <a href='#' id='select-payer'>
+                  ${render_avatar(user_person)}
+                </a>
+                <input type='hidden' name='payer'
+                       value='${user_person.person_id}'
                        required='required'/>
               </label>
 
-              <div id='user-selector' style='display: none;'>
-                <div py:for='user in users'
-                     class='select-user'
-                     data-user='${user.id}'>
-                  <a href='#'>${render_avatar(user)}</a>
+              <div id='person-selector' style='display: none;'>
+                <div py:for='person in people'
+                     class='select-person'
+                     data-person='${person.person_id}'>
+                  <a href='#'>${render_avatar(person)}</a>
                 </div>
               </div>
             </li>
@@ -47,6 +63,7 @@
                 <h2>amount</h2>
                 <input type='number' name='amount' value='0'
                        class='eight'
+                       autofocus='autofocus'
                        min='1' required='required'/>
               </label>
               <label>
@@ -60,21 +77,23 @@
         <div class='panel radius'>
           <h2>victims</h2>
           <ul class='block-grid five-up'>
-            <li py:for='user in users'>
-              <a href='#' class='toggle-victim' data-user='${user.id}'>
-                ${render_avatar(user)}
+            <li py:for='person in people'>
+              <a href='#' class='toggle-victim'
+                 data-person='${person.person_id}'>
+                ${render_avatar(person)}
               </a>
             </li>
           </ul>
 
           <table id='victim-list'>
-            <tr py:for='user in users' class='victim'
-                data-user='${user.id}'
+            <tr py:for='person in people' class='victim'
+                data-person='${person.person_id}'
                 style='display: none;'>
-              <td>${render_avatar(user)}</td>
+              <td>${render_avatar(person)}</td>
               <td>
                 <div>
-                  <input type='hidden' name='victim' value='${user.id}'/>
+                  <input type='hidden' name='victim'
+                         value='${person.person_id}'/>
                   <input type='range' value='0' min='0' max='10'
                          name='shares'/>
                 </div>

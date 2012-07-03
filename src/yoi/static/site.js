@@ -59,16 +59,16 @@ $.fn.yoi_entry_editor = function() {
         ev.preventDefault();
 
         var offset = $(this).offset();
-        $('#user-selector')
+        $('#person-selector')
             .css({top: ev.pageY, left: ev.pageX - offset.left})
             .show();
 
         update_share_descriptions();
     });
-    this.on('click activate', '.select-user', function(ev) {
+    this.on('click activate', '.select-person', function(ev) {
         ev.preventDefault();
 
-        $('#user-selector')
+        $('#person-selector')
             .hide();
         $('#select-payer .avatar')
             .replaceWith($(this).find('.avatar').clone());

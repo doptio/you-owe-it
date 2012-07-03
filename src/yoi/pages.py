@@ -145,3 +145,19 @@ def join_event(external_id, slug):
 
     request.log.info('form not valid: %r', form.errors)
     raise BadRequest()
+
+class NewEntryForm(Form):
+    pass
+
+@app.route('/<external_id>/<slug>/new-entry', methods=['GET', 'POST'])
+def new_entry(external_id, slug):
+    event = Event.find(external_id)
+
+    form = NewEntryForm()
+    if form.validate_on_submit():
+        flash('not implemented yet')
+
+    if form.errors:
+        flash('event not created', 'alert')
+
+    return render_response('new-entry.html', {'form': form, 'event': event})
