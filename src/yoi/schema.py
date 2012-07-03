@@ -102,7 +102,7 @@ class Event(app.db.Model):
             shares_total = sum(victim.share for victim in entry.victims)
             person_total[entry.payer] += entry.amount
             for victim in entry.victims:
-                amount = entry.amount * shares_total / victim.share
+                amount = entry.amount * victim.share / shares_total
                 person_total[victim.victim] -= amount
 
         return person_total
