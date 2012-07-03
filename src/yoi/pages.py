@@ -157,13 +157,28 @@ class NewEntryForm(Form):
         if field.data not in self.valid_people:
             raise ValueError('unknown person')
 
-    def post_validate(self, form, validation_stopped):
-        if len(form.victims.data) != len(form.shares.data):
+    def validate(self):
+        super(Form, self).validate()
+
+        # Remove victims with 0 shares.
+        victims = [(victim, share)
+                   for victim, share in zip(self.victims.data,
+                                            self.shares.data)
+                   if share]
+        if not victims:
+            self.victims.errors.append('At least one victim is required')
+        else:
+            self.victims.data, self.shares.data = zip(*victims)
+
+        # Sanity check input.
+        if len(self.victims.data) != len(self.shares.data):
             raise ValueError('len(victims) != len(shares)')
 
-        for victim in form.victims.data:
-            if victim not in form.valid_people:
+        for victim in self.victims.data:
+            if victim not in self.valid_people:
                 raise ValueError('unknown person')
+
+        return not self.errors
 
 def create_entry(event, form):
     entry = Entry()
@@ -177,12 +192,9 @@ def create_entry(event, form):
     app.db.session.flush()
 
     for victim, share in zip(form.victims.data, form.shares.data):
-        share = int(share * 100)
-        if not share:
-            continue
         app.db.session.add(EntryVictim(entry=entry.id,
                                        victim=victim,
-                                       share=share))
+                                       share=int(share * 100)))
 
 @app.route('/<external_id>/<slug>/entry/', methods=['GET', 'POST'])
 def new_entry(external_id, slug):
