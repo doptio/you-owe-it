@@ -111,14 +111,6 @@ $.fn.yoi_entry_editor = function() {
     update_share_descriptions();
 };
 
-$(document).ready(function() {
-    $('.entry-editor').yoi_entry_editor();
-
-    if(document.location.pathname == '/journal'
-       && document.location.search != '')
-        $('#new-entry-notice').toggle();
-});
-
 /* Magic for "Add People" dialog */
 $(document).ready(function() {
     $('ol.input-auto-repeat').on('keyup', 'input', function() {
