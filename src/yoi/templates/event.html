@@ -42,19 +42,19 @@
         <li py:for='person in event.members'>
           ${render_avatar_img(person)}
           ${person.name}<br/>
-          ${render_amount(person_total[person.person_id])}
+          ${render_amount(event.person_total[person.person_id])}
         </li>
       </ul>
     </div>
 
     <h2>latest entries</h2>
-    <p py:if='not entries'>
+    <p py:if='not event.all_entries'>
       This event has no entries yet,
       <a href='${url_for("new_entry",
                          external_id=event.external_id,
                          slug=event.slug)}'>add one</a>?
     </p>
-    <table py:if='entries'>
+    <table py:if='event.all_entries'>
       <thead>
         <th id='date'>date</th>
         <th id='amount' class='number'>amount</th>
@@ -62,15 +62,15 @@
         <th>description</th>
       </thead>
 
-      <tbody py:for='entry, victims in entries[-3:]'
-             py:with='total_shares = sum(v.share for v in victims)'>
+      <tbody py:for='entry in event.all_entries[:3]'
+             py:with='total_shares = sum(v.share for v in entry.victims)'>
         <tr>
           <td>${entry.date.strftime('%Y-%m-%d')}</td>
           <td class='number'>${render_amount(entry.amount)}</td>
           <td>${people[entry.payer].name}</td>
           <td>${entry.description}</td>
         </tr>
-        <tr py:for='victim in victims'>
+        <tr py:for='victim in entry.victims'>
           <td/>
           <td class='number'>${render_amount(- entry.amount
                                                * victim.share

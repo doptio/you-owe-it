@@ -88,8 +88,9 @@ class Event(app.db.Model):
         entries = ordereddict()
         for entry, victim in entry_and_victim:
             if entry.id not in entries:
-                entries[entry.id] = (entry, [])
-            entries[entry.id][1].append(victim)
+                entry.victims = []
+                entries[entry.id] = entry
+            entries[entry.id].victims.append(victim)
 
         return entries.values()
 
@@ -97,10 +98,10 @@ class Event(app.db.Model):
     def person_total(self):
         # Calculate the total worth of each person in the event.
         person_total = defaultdict(int)
-        for entry, victims in self.all_entries:
-            shares_total = sum(victim.share for victim in victims)
+        for entry in self.all_entries:
+            shares_total = sum(victim.share for victim in entry.victims)
             person_total[entry.payer] += entry.amount
-            for victim in victims:
+            for victim in entry.victims:
                 amount = entry.amount * shares_total / victim.share
                 person_total[victim.victim] -= amount
 

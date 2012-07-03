@@ -19,7 +19,7 @@
             <td><h3><a href='${event.url_for}'>${event.name}</a></h3></td>
             <td><h3><a title='According to the New Mayan calendar'
                        href='${event.url_for}' py:if='event.all_entries'>
-              ${event.all_entries[0][0].date.strftime('%Y-%m-%d')}
+              ${event.all_entries[0].date.strftime('%Y-%m-%d')}
             </a></h3></td>
             <td class='number'><h3><a href='${event.url_for}'>
               ${render_amount(event.user_total[g.user.id])}

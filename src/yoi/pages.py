@@ -121,8 +121,6 @@ def event(external_id, slug):
     event = Event.find(external_id)
     return render_response('event.html', {
         'event': event,
-        'entries': event.all_entries,
-        'person_total': event.person_total,
         'form': EmptyForm(),
     })
 
