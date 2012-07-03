@@ -3,15 +3,15 @@ from __future__ import unicode_literals, division
 from datetime import date
 from flask import g, request, url_for, redirect, flash, jsonify
 from flaskext.genshi import render_response
-from flaskext.wtf import Form, TextField, Required, Optional, Email, Length, \
-                         Field, IntegerField, BooleanField, \
-                         DecimalField, NumberRange, DateField
 from random import randrange
 from sqlalchemy.exc import IntegrityError
 from werkzeug.exceptions import BadRequest
 
 from yoi.app import app
 from yoi.schema import Event, Person, Entry, EntryVictim
+from yoi.wtf import Form, TextField, Required, Optional, Email, Length, \
+                    Field, IntegerField, BooleanField, \
+                    DecimalField, NumberRange, DateField, ListOf
 
 @app.route('/')
 def index():
@@ -24,19 +24,6 @@ def tour():
 @app.route('/home')
 def home():
     return render_response('home.html', {'events': Event.for_user(g.user.id)})
-
-class ListOf(Field):
-    'I am a pseudo-field that can only parse incoming form data.'
-
-    def __init__(self, unbound_field, **kwargs):
-        super(ListOf, self).__init__(**kwargs)
-        self.subfield = unbound_field.bind(form=None, name='')
-
-    def process(self, formdata):
-        self.data = []
-        for data in formdata.getlist(self.name):
-            self.subfield.process_formdata([data])
-            self.data.append(self.subfield.data)
 
 class UserSettingsForm(Form):
     name = TextField('name', validators=[
@@ -92,6 +79,8 @@ def create_event(form):
                               name=g.user.name,
                               user=g.user.id))
     for name in form.people.data:
+        if not name:
+            continue
         app.db.session.add(Person(event=event.id, name=name))
 
     return event
