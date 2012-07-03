@@ -36,21 +36,14 @@
             <li>
               <label>
                 <h2>payer</h2>
-                <a href='#' id='select-payer'>
+                <a href='#' id='payer-avatar'
+                   class='for-dialog' data-dialog='select-payer'>
                   ${render_avatar(user_person)}
                 </a>
                 <input type='hidden' name='payer'
                        value='${user_person.person_id}'
                        required='required'/>
               </label>
-
-              <div id='person-selector' style='display: none;'>
-                <div py:for='person in people'
-                     class='select-person'
-                     data-person='${person.person_id}'>
-                  <a href='#'>${render_avatar(person)}</a>
-                </div>
-              </div>
             </li>
 
             <li>
@@ -132,6 +125,17 @@
         <input type='submit'
                class='nice large radius button'
                value='Add entry'/>
+
+        <div class='dialog' id='select-payer'>
+          <h1>Select Payer</h1>
+          <ul id='person-selector' class='block-grid four-up'>
+            <li py:for='person in people'
+                class='select-person'
+                data-person='${person.person_id}'>
+              <a href='#'>${render_avatar(person)}</a>
+            </li>
+          </ul>
+        </div>
       </form>
     </div>
   </div>

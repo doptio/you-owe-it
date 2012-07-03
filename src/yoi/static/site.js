@@ -58,22 +58,12 @@ $.fn.yoi_entry_editor = function() {
         update_share_descriptions();
     });
 
-    this.on('click activate', '#select-payer', function(ev) {
+    $('#select-payer').on('click activate', '.select-person', function(ev) {
         ev.preventDefault();
 
-        var offset = $(this).offset();
-        $('#person-selector')
-            .css({top: ev.pageY, left: ev.pageX - offset.left})
-            .show();
+        $('#select-payer').dialog('close');
 
-        update_share_descriptions();
-    });
-    this.on('click activate', '.select-person', function(ev) {
-        ev.preventDefault();
-
-        $('#person-selector')
-            .hide();
-        $('#select-payer .avatar')
+        $('#payer-avatar .avatar')
             .replaceWith($(this).find('.avatar').clone());
         $('input[name=payer]')
             .val($(this).data('person'));
