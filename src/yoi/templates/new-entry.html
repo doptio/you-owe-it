@@ -60,9 +60,10 @@
               <label>
                 <h2>amount</h2>
                 ${render_field(form.amount,
-                               type='number', class_='eight',
+                               type='text', class_='eight',
+                               pattern='[0-9.,]+',
                                autofocus=True, required=True,
-                               min=1, placeholder='how much did you spend?',
+                               placeholder='how much did you spend?',
                                tabindex=1)}
               </label>
               <label>

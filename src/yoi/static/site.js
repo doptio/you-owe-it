@@ -17,7 +17,7 @@ $.fn.yoi_entry_editor = function() {
 
         var amount_total = 0;
         self.find('.victim input[name=shares]').each(function(i, e) {
-            amount_total += parseFloat(e.value);
+            amount_total += Yoi.parse_amount(e.value);
         });
 
         self.find('input[name=amount]').val(amount_total);
@@ -28,10 +28,10 @@ $.fn.yoi_entry_editor = function() {
 
         var shares_total = 0;
         self.find('input[name=shares]').each(function(i, e) {
-            shares_total += parseFloat(e.value);
+            shares_total += Yoi.parse_amount(e.value);
         });
 
-        var amount_total = parseFloat(self.find('input[name=amount]').val());
+        var amount_total = Yoi.parse_amount(self.find('input[name=amount]').val());
 
         self.find('.victim').each(function(i, e) {
             var e = $(e);
@@ -173,6 +173,10 @@ $(document).ready(function() {
 });
 
 var Yoi = {};
+
+Yoi.parse_amount = function(amt) {
+    return parseFloat(amt.replace(',', '.'));
+};
 
 Yoi.ajax = function(opts) {
     var defaults = {

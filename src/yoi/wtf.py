@@ -3,6 +3,13 @@ from flaskext.wtf import Form, Field, IntegerField, BooleanField, \
                          DateField, DecimalField
 from flaskext.wtf import Required, Optional, Length, NumberRange, Email
 
+class DecimalField(wtf.DecimalField):
+    'A decial field that treats "," and "." alike.'
+
+    def process_formdata(self, formdata):
+        formdata = [fd.replace(',', '.') for fd in formdata]
+        super(DecimalField, self).process_formdata(formdata)
+
 class TextField(wtf.TextField):
     'A non-retarded text field.'
 
