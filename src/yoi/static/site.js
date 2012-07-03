@@ -54,7 +54,7 @@ $.fn.yoi_entry_editor = function() {
         });
     };
 
-    this.find('input').on('change', function(ev) {
+    self.find('input').on('change', function(ev) {
         update_share_descriptions();
     });
 
@@ -89,7 +89,7 @@ $.fn.yoi_entry_editor = function() {
         update_share_descriptions();
     });
 
-    this.on('click activate', '.toggle-victim', function(ev) {
+    self.on('click activate', '.toggle-victim', function(ev) {
         ev.preventDefault();
         var victim = $(this).data('person');
         self.find('.victim').each(function(i, e) {
@@ -110,6 +110,9 @@ $.fn.yoi_entry_editor = function() {
 
     update_share_descriptions();
 };
+$(document).ready(function() {
+    $('.entry-editor').yoi_entry_editor();
+});
 
 /* Magic for "Add People" dialog */
 $(document).ready(function() {
