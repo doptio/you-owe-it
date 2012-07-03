@@ -119,6 +119,33 @@ $(document).ready(function() {
         $('#new-entry-notice').toggle();
 });
 
+/* Magic for "Add People" dialog */
+$(document).ready(function() {
+    $('ol.input-auto-repeat').on('keyup', 'input', function() {
+        /* Add a new empty input, if this is the last input, and it not
+         * empty. */
+        var this_is_last = ($(this)
+                                .closest('li')
+                                .filter(':last-child')
+                                .length > 0);
+
+        if(this.value != '' && this_is_last) {
+            var ol = $(this).closest('ol.input-auto-repeat');
+            var li = ol.find('li:first-child').clone();
+            li.find('input').val('');
+            ol.append(li);
+        }
+    });
+
+    $('ol.input-auto-repeat').on('blur focus', 'input', function() {
+        /* Remove all empty inputs, except the last one. */
+        $(this)
+            .closest('ol.input-auto-repeat')
+            .find('li:not(:last-child):has(input[value=])')
+            .remove();
+    });
+});
+
 /* Generic dialogs */
 $(document).ready(function() {
     var dialogs = {};
@@ -198,30 +225,6 @@ $(document).ready(function() {
 
 /* Magic for "Add People" dialog */
 $(document).ready(function() {
-    $('#add-people').on('keyup', 'input[name=name]', function() {
-        /* Add a new empty input, if this is the last input, and it not
-         * empty. */
-        var this_is_last = ($(this)
-                                .closest('li')
-                                .filter(':last-child')
-                                .length > 0);
-
-        if(this.value != '' && this_is_last) {
-            var ol = $(this).closest('ol');
-            var li = ol.find('li:first-child').clone();
-            li.find('input').val('');
-            ol.append(li);
-        }
-    });
-
-    $('#add-people').on('blur focus', 'input[name=name]', function() {
-        /* Remove all empty inputs, except the last one. */
-        $(this)
-            .closest('ol')
-            .find('li:not(:last-child):has(input[value=""])')
-            .remove();
-    });
-
     $('#add-people').on('dialogopen', function() {
         /* Reset dialog when opening */
         $(this)
@@ -231,6 +234,6 @@ $(document).ready(function() {
 
     $('#add-people').on('dialog-ok', function() {
         /* FIXME - Submit form! */
-        console.log($('#add-people').find('input[value!=""]'));
+        console.log($('#add-people').find('input[value!=]'));
     });
 });
