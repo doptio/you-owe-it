@@ -15,16 +15,18 @@
         href='/new-event'>create a new event</a>?</p>
 
         <table py:if='events'>
-          <tr py:for='event in events'>
-            <td><h3><a href='${event.url_for}'>${event.name}</a></h3></td>
-            <td><h3><a title='According to the New Mayan calendar'
-                       href='${event.url_for}' py:if='event.all_entries'>
-              ${event.all_entries[0].date.strftime('%Y-%m-%d')}
-            </a></h3></td>
-            <td class='number'><h3><a href='${event.url_for}'>
-              ${render_amount(event.user_total[g.user.id])}
-            </a></h3></td>
-          </tr>
+          <tbody>
+            <tr py:for='event in events'>
+              <td><h3><a href='${event.url_for}'>${event.name}</a></h3></td>
+              <td><h3><a title='According to the New Mayan calendar'
+                         href='${event.url_for}' py:if='event.all_entries'>
+                ${event.all_entries[0].date.strftime('%Y-%m-%d')}
+              </a></h3></td>
+              <td class='number'><h3><a href='${event.url_for}'>
+                ${render_amount(event.user_total[g.user.id])}
+              </a></h3></td>
+            </tr>
+          </tbody>
         </table>
 
         <a href='/new-event' class='large button'>Create new event</a>

@@ -80,8 +80,8 @@ table {
     width: 100%;
     border-collapse: collapse;
 }
-table tr:hover,
-table tr:nth-child(even):hover {
+table tbody tr:hover,
+table tbody tr:nth-child(even):hover {
     background-color: #f0f0f0;
 }
 
@@ -113,6 +113,18 @@ ul.errors li {
     list-style: none;
     background: 0% 50% no-repeat url(../images/exclamation-24x24.png);
     padding-left: 32px;
+}
+
+table.entries tbody tr:hover,
+table.entries tbody tr:nth-child(even),
+table.entries tbody tr:nth-child(even):hover {
+    background-color: inherit
+}
+table.entries tbody:nth-of-type(even) {
+    background-color: #f9f9f9;
+}
+table.entries tbody:hover {
+    background-color: #f0f0f0;
 }
 
 /* Entry editor styling */
