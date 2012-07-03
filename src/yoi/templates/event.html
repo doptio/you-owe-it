@@ -39,7 +39,7 @@
         <li py:for='person in event.members'>
           ${render_avatar_img(person)}
           ${person.name}<br/>
-          ${render_amount(person.amount)}
+          ${render_amount(person_total[person.person_id] / 100)}
         </li>
       </ul>
     </div>
