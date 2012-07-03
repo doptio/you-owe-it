@@ -110,6 +110,9 @@ class EntryVictim(app.db.Model):
     share = app.db.Column(app.db.Integer,
                           CheckConstraint('share > 0'), nullable=False)
 
+    # FIXME - It would be great with a constraint ensuring that
+    # `entry.event == victim.event`.
+
     __table_args__ = (
         UniqueConstraint('entry', 'victim'),
     )
