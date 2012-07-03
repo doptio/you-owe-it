@@ -1,5 +1,6 @@
-from collections import namedtuple
+from collections import namedtuple, defaultdict, OrderedDict as ordereddict
 from flask import url_for
+from sqlalchemy import sql
 from sqlalchemy import Column, Integer, String, \
                        CheckConstraint, ForeignKey, UniqueConstraint
 import translitcodec  # imported to get the translit/long encoding
@@ -39,6 +40,16 @@ class Event(app.db.Model):
                     .filter_by(external_id=external_id)
                     .one())
 
+    @classmethod
+    def for_user(cls, user_id):
+        return (app.db.session
+                    .query(Event)
+                    .filter(Event.id.in_(
+                                sql.select([Person.event],
+                                           Person.user == user_id)))
+                    .order_by(Event.name)
+                    .all())
+
     @property
     def slug(self):
         # slugify can return an empty string, if the given text is all asian
@@ -62,6 +73,38 @@ class Event(app.db.Model):
                     .order_by(Person.name))
         return [Member(row[0], row[1] or row[2], row[3], 0.0, row[4])
                 for row in rows]
+
+    @cached_property
+    def all_entries(self):
+        entry_and_victim = (
+                app.db.session
+                    .query(Entry, EntryVictim)
+                    .filter(Entry.event == self.id,
+                            EntryVictim.entry == Entry.id)
+                    .order_by(Entry.id, Entry.date)
+                    .all())
+
+        # Reshape (entry, victim) list into a list of (entry, victims).
+        entries = ordereddict()
+        for entry, victim in entry_and_victim:
+            if entry.id not in entries:
+                entries[entry.id] = (entry, [])
+            entries[entry.id][1].append(victim)
+
+        return entries.values()
+
+    @cached_property
+    def person_total(self):
+        # Calculate the total worth of each person in the event.
+        person_total = defaultdict(int)
+        for entry, victims in self.all_entries:
+            shares_total = sum(victim.share for victim in victims)
+            person_total[entry.payer] += entry.amount
+            for victim in victims:
+                amount = entry.amount * shares_total / victim.share
+                person_total[victim.victim] -= amount
+
+        return person_total
 
 class Person(app.db.Model):
     '''People are the association between events and user.

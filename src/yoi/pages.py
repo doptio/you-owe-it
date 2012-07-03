@@ -1,6 +1,5 @@
 from __future__ import unicode_literals, division
 
-from collections import defaultdict, OrderedDict as ordereddict
 from datetime import date
 from flask import g, request, url_for, redirect, flash, jsonify
 from flaskext.genshi import render_response
@@ -8,7 +7,6 @@ from flaskext.wtf import Form, TextField, Required, Optional, Email, Length, \
                          Field, IntegerField, BooleanField, \
                          DecimalField, NumberRange, DateField
 from random import randrange
-from sqlalchemy import sql
 from sqlalchemy.exc import IntegrityError
 from werkzeug.exceptions import BadRequest
 
@@ -25,13 +23,7 @@ def tour():
 
 @app.route('/home')
 def home():
-    events = (app.db.session
-                .query(Event)
-                .filter(Event.id.in_(sql.select([Person.event],
-                                                Person.user == g.user.id)))
-                .order_by(Event.name)
-                .all())
-    return render_response('home.html', {'events': events})
+    return render_response('home.html', {'events': Event.for_user(g.user.id)})
 
 class ListOf(Field):
     'I am a pseudo-field that can only parse incoming form data.'
@@ -127,36 +119,10 @@ class EmptyForm(Form):
 @app.route('/<external_id>/<slug>/')
 def event(external_id, slug):
     event = Event.find(external_id)
-
-    entry_and_victim = (
-            app.db.session
-                .query(Entry, EntryVictim)
-                .filter(Entry.event == event.id,
-                        EntryVictim.entry == Entry.id)
-                .order_by(Entry.id, Entry.date)
-                .all())
-
-    # Reshape (entry, victim) list into a list of (entry, victims).
-    entries = ordereddict()
-    for entry, victim in entry_and_victim:
-        if entry.id not in entries:
-            entries[entry.id] = (entry, [])
-        entries[entry.id][1].append(victim)
-    entries = entries.values()
-
-    # Calculate the total worth of each person in the event.
-    person_total = defaultdict(int)
-    for entry, victims in entries:
-        shares_total = sum(victim.share for victim in victims)
-        person_total[entry.payer] += entry.amount
-        for victim in victims:
-            amount = entry.amount * shares_total / victim.share
-            person_total[victim.victim] -= amount
-
     return render_response('event.html', {
-        'entries': entries,
-        'person_total': person_total,
         'event': event,
+        'entries': event.all_entries,
+        'person_total': event.person_total,
         'form': EmptyForm(),
     })
 
