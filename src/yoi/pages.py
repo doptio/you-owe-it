@@ -62,14 +62,6 @@ def settings():
 
     return render_response('settings.html', {'form': form})
 
-@app.route('/journal')
-def journal():
-    return render_response('journal.html')
-
-@app.route('/new-entry')
-def new_entry():
-    return render_response('new-entry.html')
-
 class NewEventForm(Form):
     name = TextField('name', validators=[
         Required(),
