@@ -154,7 +154,7 @@ def event(external_id, slug):
             person_total[victim.victim] -= amount
 
     return render_response('event.html', {
-        'entries': [],
+        'entries': entries,
         'person_total': person_total,
         'event': event,
         'form': EmptyForm(),
