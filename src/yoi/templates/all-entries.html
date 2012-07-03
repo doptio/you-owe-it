@@ -1,0 +1,11 @@
+<html xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href='page.html'/>
+<head/>
+<body class='widget-app'>
+  <div id='content'>
+    <h1>${event.name} &ndash; all entries</h1>
+    ${render_entries(event.all_entries)}
+  </div>
+</body>
+</html>

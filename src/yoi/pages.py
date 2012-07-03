@@ -113,6 +113,11 @@ def event(external_id, slug):
         'form': EmptyForm(),
     })
 
+@app.route('/<external_id>/<slug>/entry/')
+def all_entries(external_id, slug):
+    event = Event.find(external_id)
+    return render_response('all-entries.html', {'event': event})
+
 class JoinEventForm(Form):
     person = IntegerField('person', validators=[Optional()])
 
@@ -196,7 +201,7 @@ def create_entry(event, form):
                                        victim=victim,
                                        share=int(share * 100)))
 
-@app.route('/<external_id>/<slug>/entry/', methods=['GET', 'POST'])
+@app.route('/<external_id>/<slug>/entry/new', methods=['GET', 'POST'])
 def new_entry(external_id, slug):
     event = Event.find(external_id)
 

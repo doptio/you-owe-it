@@ -8,9 +8,6 @@
     <h1>${event.name}</h1>
 
     <?python
-      dict = type({})
-      people = dict((person.person_id, person)
-                    for person in event.members)
       is_member = (g.user and
                    g.user.id in [member.user_id for member in event.members])
     ?>
@@ -54,33 +51,13 @@
                          external_id=event.external_id,
                          slug=event.slug)}'>add one</a>?
     </p>
-    <table class='entries' py:if='event.all_entries'>
-      <thead>
-        <th id='date'>date</th>
-        <th id='amount' class='number'>amount</th>
-        <th>who</th>
-        <th>description</th>
-      </thead>
-
-      <tbody py:for='entry in event.all_entries[:3]'
-             py:with='total_shares = sum(v.share for v in entry.victims)'>
-        <tr>
-          <td>${entry.date.strftime('%Y-%m-%d')}</td>
-          <td class='number'>${render_amount(entry.amount)}</td>
-          <td>${people[entry.payer].name}</td>
-          <td>${entry.description}</td>
-        </tr>
-        <tr py:for='victim in entry.victims'>
-          <td/>
-          <td class='number'>${render_amount(- entry.amount
-                                               * victim.share
-                                               / total_shares)}</td>
-          <td>${people[victim.victim].name}</td>
-          <td/>
-        </tr>
-      </tbody>
-    </table>
-    <a class='nice large radius button' href='#'>View all entries</a>
+    <div py:if='event.all_entries'>
+      ${render_entries(event.all_entries[:3])}
+      <a class='large button'
+         href='${url_for("all_entries",
+                         external_id=event.external_id,
+                         slug=event.slug)}'>View all entries</a>
+    </div>
 
     <div id='add-people' class='dialog'>
       <h1>Add People</h1>
