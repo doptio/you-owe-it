@@ -81,7 +81,7 @@ class Event(app.db.Model):
                     .query(Entry, EntryVictim)
                     .filter(Entry.event == self.id,
                             EntryVictim.entry == Entry.id)
-                    .order_by(Entry.id, Entry.date)
+                    .order_by(Entry.date.desc(), Entry.id.desc())
                     .all())
 
         # Reshape (entry, victim) list into a list of (entry, victims).
@@ -105,6 +105,12 @@ class Event(app.db.Model):
                 person_total[victim.victim] -= amount
 
         return person_total
+
+    @cached_property
+    def user_total(self):
+        return dict((person.user_id, self.person_total[person.person_id])
+                    for person in self.members
+                    if person.user_id)
 
 class Person(app.db.Model):
     '''People are the association between events and user.
