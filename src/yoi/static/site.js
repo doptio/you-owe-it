@@ -4,6 +4,10 @@ var formatAmount = function(amt) {
 };
 $.fn.yoi_entry_editor = function() {
     var self = this;
+    if(self.length == 0)
+        return;
+
+    console.log(this);
 
     var update_share_descriptions = function() {
         if(self.find('input[name=manual_entry]').attr('checked'))
