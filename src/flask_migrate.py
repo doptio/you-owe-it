@@ -44,7 +44,7 @@ class Migrate(object):
             if not os.path.exists(migrations):
                 continue
 
-            for name in sorted(os.listdir(migrations)):
+            for name in os.listdir(migrations):
                 if script_re.match(name):
                     yield prefix + name, os.path.join(migrations, name)
 
@@ -54,7 +54,9 @@ class Migrate(object):
             Change.__table__.metadata.bind = self.app.db.session.bind
             Change.__table__.create(checkfirst=True)
 
-            for name, path in self.all_scripts():
+            all = sorted(self.all_scripts(),
+                         key=lambda (name, path): os.path.basename(path))
+            for name, path in all:
                 if Change.query.filter_by(name=name).count():
                     continue
 
