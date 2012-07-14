@@ -5,7 +5,7 @@ from flask import g, request, url_for, redirect, flash, jsonify
 from flaskext.genshi import render_response
 from random import randrange
 from sqlalchemy.exc import IntegrityError
-from werkzeug.exceptions import BadRequest
+from werkzeug.exceptions import BadRequest, NotFound
 
 from yoi.app import app
 from yoi.schema import Event, Person, Entry, EntryVictim
@@ -117,6 +117,39 @@ def event(external_id, slug):
 def all_entries(external_id, slug):
     event = Event.find(external_id)
     return render_response('all-entries.html', {'event': event})
+
+def requested_entry(external_id, entry_id):
+    event = Event.find(external_id)
+    try:
+        entry, = [entry
+                  for entry in event.all_entries
+                  if entry.id == entry_id]
+    except ValueError:
+        raise NotFound()
+    return event, entry
+
+@app.route('/<external_id>/<slug>/entry/<int:entry_id>')
+def entry(external_id, slug, entry_id):
+    event, entry = requested_entry(external_id, entry_id)
+    return render_response('entry.html', {
+        'form': EmptyForm(),
+        'event': event,
+        'entry': entry,
+    })
+
+@app.route('/<external_id>/<slug>/entry/<int:entry_id>/delete',
+           methods=['POST'])
+def delete_entry(external_id, slug, entry_id):
+    if not EmptyForm().validate_on_submit():
+        return 'Bad request', 400
+
+    event, entry = requested_entry(external_id, entry_id)
+
+    app.db.session.query(EntryVictim).filter_by(entry=entry.id).delete()
+    app.db.session.query(Entry).filter_by(id=entry.id).delete()
+    app.db.session.commit()
+
+    return redirect(event.url_for)
 
 class AddPeopleForm(Form):
     people = ListOf(TextField())

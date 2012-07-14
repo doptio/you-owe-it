@@ -52,19 +52,26 @@
     </thead>
 
     <tbody py:for='entry in entries'
-           py:with='total_shares = sum(v.share for v in entry.victims)'>
+           py:with='total_shares = sum(v.share for v in entry.victims);
+                    link = url_for("entry",
+                                   external_id=event.external_id,
+                                   slug=event.slug,
+                                   entry_id=entry.id)'>
       <tr>
-        <td>${entry.date.strftime('%Y-%m-%d')}</td>
-        <td class='number'>${render_amount(entry.amount)}</td>
-        <td>${people[entry.payer].name}</td>
-        <td>${entry.description}</td>
+        <td><a href='${link}'>${entry.date.strftime('%Y-%m-%d')}</a></td>
+        <td class='number'>
+          <a href='${link}'>${render_amount(entry.amount)}</a>
+        </td>
+        <td><a href='${link}'>${people[entry.payer].name}</a></td>
+        <td><a href='${link}'>${entry.description}</a></td>
       </tr>
       <tr py:for='victim in entry.victims'>
         <td/>
-        <td class='number'>${render_amount(- entry.amount
-                                             * victim.share
-                                             / total_shares)}</td>
-        <td>${people[victim.victim].name}</td>
+        <td class='number' py:with='amount = - entry.amount
+                                               * victim.share / total_shares'>
+          <a href='${link}'>${render_amount(amount)}</a>
+        </td>
+        <td><a href='${link}'>${people[victim.victim].name}</a></td>
         <td/>
       </tr>
     </tbody>

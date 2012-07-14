@@ -1,0 +1,26 @@
+<html xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<xi:include href='page.html'/>
+
+<head/>
+<body class='widget-app'>
+  <div id='content'>
+    <div>
+      <h1>${event.name} &ndash; entry</h1>
+      ${render_entries([entry])}
+
+      <form method='POST'
+            action='${url_for("delete_entry",
+                              external_id=event.external_id,
+                              slug=event.slug,
+                              entry_id=entry.id)}'>
+        ${form.csrf_token}
+
+        <button name='action' value='delete'
+                class='nice large radius red button'>Delete Entry</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
