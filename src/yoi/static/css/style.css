@@ -1,4 +1,8 @@
 /* Styles for elements in page template */
+#content {
+    min-height: 20em;
+}
+
 #top-menu {
     height: 50px;
     background-color: black;
@@ -27,6 +31,14 @@
 }
 #top-menu .has-flyout:hover .flyout {
     display: block;
+}
+
+#footer {
+    border-top: thin solid #cdc;
+    text-align: right;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #666;
 }
 
 /* Missing HTML5 input styles from foundation */
