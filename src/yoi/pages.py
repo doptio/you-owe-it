@@ -25,16 +25,18 @@ def tour():
 def home():
     return render_response('home.html', {'events': Event.for_user(g.user.id)})
 
+def clear_if_empty(v):
+    if not v:
+        return None
+    else:
+        return v
+
 class UserSettingsForm(Form):
-    name = TextField('name', validators=[
-        Required(),
-        Length(min=3, max=15),
-    ])
-    email = TextField('e-mail', validators=[
-        Optional(),
-        Email(),
-        Length(max=30),
-    ])
+    name = TextField('name',
+                     validators=[Required(), Length(min=3, max=15)])
+    email = TextField('e-mail',
+                      validators=[Optional(), Email(), Length(max=30)],
+                      filters=[clear_if_empty])
 
 @app.route('/settings', methods=['GET', 'POST'])
 def settings():
