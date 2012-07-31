@@ -23,10 +23,10 @@
 
 <py:def function='render_amount(amount)'>
   <span py:if='amount &lt; 0' class='red'>
-    &minus; ${'%.1f' % (-amount / 100.0)}
+    <nobr>&minus; ${'%.1f' % (-amount / 100.0)}</nobr>
   </span>
   <span py:if='amount >= 0' class='green'>
-    + ${'%.1f' % (amount / 100.0)}
+    <nobr>+ ${'%.1f' % (amount / 100.0)}</nobr>
   </span>
 </py:def>
 
@@ -58,7 +58,7 @@
                                    slug=event.slug,
                                    entry_id=entry.id)'>
       <tr>
-        <td><a href='${link}'>${entry.date.strftime('%Y-%m-%d')}</a></td>
+        <td><a href='${link}'><nobr>${entry.date.strftime('%Y-%m-%d')}</nobr></a></td>
         <td class='number'>
           <a href='${link}'>${render_amount(entry.amount)}</a>
         </td>
