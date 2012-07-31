@@ -33,9 +33,9 @@ def clear_if_empty(v):
 
 class UserSettingsForm(Form):
     name = TextField('name',
-                     validators=[Required(), Length(min=3, max=15)])
+                     validators=[Required(), Length(min=1, max=42)])
     email = TextField('e-mail',
-                      validators=[Optional(), Email(), Length(max=30)],
+                      validators=[Optional(), Email(), Length(max=42)],
                       filters=[clear_if_empty])
 
 @app.route('/settings', methods=['GET', 'POST'])
@@ -62,11 +62,9 @@ def settings():
     return render_response('settings.html', {'form': form})
 
 class NewEventForm(Form):
-    name = TextField('name', validators=[
-        Required(),
-        Length(min=3, max=20),
-    ])
-    people = ListOf(TextField('name', validators=[Optional()]))
+    name = TextField('name', validators=[Required(), Length(min=1, max=42)])
+    people = ListOf(TextField('name',
+                              validators=[Optional(), Length(min=1, max=42)]))
 
 def random_identifier():
     # FIXME - disallow identifiers that do not start with a number?
@@ -156,7 +154,7 @@ def delete_entry(external_id, slug, entry_id):
     return redirect(event.url_for)
 
 class AddPeopleForm(Form):
-    people = ListOf(TextField())
+    people = ListOf(TextField(validators=[Length(min=1, max=42)]))
 
 @app.route('/<external_id>/<slug>/add-people', methods=['POST'])
 def add_people(external_id, slug):
@@ -206,7 +204,7 @@ def join_event(external_id, slug):
 class NewEntryForm(Form):
     payer = IntegerField(validators=[Required()])
     date = DateField(default=date.today, validators=[Required()])
-    description = TextField(validators=[Required()])
+    description = TextField(validators=[Required(), Length(min=1, max=100)])
     manual_entry = BooleanField()
     amount = DecimalField(validators=[Required(), NumberRange(min=1)])
 
