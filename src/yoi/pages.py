@@ -50,6 +50,8 @@ def settings():
             return redirect(url_for('home'))
 
         except IntegrityError:
+            request.log.warn('IntegrityError saving user %d <- %r',
+                             g.user.id, request.form, exc_info=True)
             form.email.errors.append('Email already taken')
 
     if form.errors:
