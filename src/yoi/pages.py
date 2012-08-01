@@ -279,6 +279,7 @@ def new_entry(external_id, slug):
 def admin_list_users():
     users = (app.db.session
                 .query(app.db.User)
-                .order_by(app.db.User.created.desc())
+                .order_by(app.db.User.created.desc(),
+                          app.db.User.id.desc())
                 .all())
     return render_response('admin/users.html', {'users': users})
