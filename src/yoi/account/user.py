@@ -56,6 +56,9 @@ class LoginForm(Form):
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
+    if g.user:
+        return redirect(url_for('home'))
+
     form = LoginForm()
     if form.validate_on_submit():
         realm = url_for('index', _external=True)

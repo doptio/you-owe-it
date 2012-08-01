@@ -15,6 +15,8 @@ from yoi.wtf import Form, TextField, Required, Optional, Email, Length, \
 
 @app.route('/')
 def index():
+    if g.user:
+        return redirect(url_for('home'))
     return render_response('index.html')
 
 @app.route('/tour')
