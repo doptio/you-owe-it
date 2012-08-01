@@ -1,0 +1,31 @@
+<html xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      id='admin-section users-page'>
+<xi:include href='../page.html'/>
+<head/>
+<body class='widget-app'>
+  <div id='content'>
+    <div class='row'>
+      <div class='eight columns'>
+        <h1>users</h1>
+
+        <table>
+          <thead>
+            <th>joined</th>
+            <th>e-mail</th>
+            <th>name</th>
+          </thead>
+
+          <tbody>
+            <tr py:for='user in users'>
+              <td>${user.created.strftime('%Y-%m-%d')}</td>
+              <td>${user.email}</td>
+              <td>${user.name}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

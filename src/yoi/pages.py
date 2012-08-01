@@ -274,3 +274,11 @@ def new_entry(external_id, slug):
         flash('entry not added', 'alert')
 
     return render_response('new-entry.html', {'form': form, 'event': event})
+
+@app.route('/admin/users')
+def admin_list_users():
+    users = (app.db.session
+                .query(app.db.User)
+                .order_by(app.db.User.created.desc())
+                .all())
+    return render_response('admin/users.html', {'users': users})

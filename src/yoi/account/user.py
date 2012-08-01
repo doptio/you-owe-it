@@ -31,6 +31,7 @@ def database_setup(state):
         id = db.Column(db.Integer, primary_key=True)
         name = db.Column(db.String)
         email = db.Column(db.String, unique=True)
+        created = db.Column(db.DateTime, nullable=False)
 
         @classmethod
         def get(cls, user_id):
@@ -111,7 +112,7 @@ def openid_return():
             break
 
     ### FIXME - Assign to existing user if we have a session!
-    user = db.User(name=name)
+    user = db.User(name=name, created=datetime.utcnow())
     db.session.add(user)
     openid = db.OpenId(user=user, openid=result.identity_url)
     db.session.add(openid)

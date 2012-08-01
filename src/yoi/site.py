@@ -15,6 +15,11 @@ def redirect_account_pages():
     if request.path in user_needful_paths and not g.user:
         return redirect(url_for('account.login'))
 
+@app.before_request
+def protect_admin_pages():
+    if request.path.startswith('/admin/'):
+        pass
+
 if __name__ == '__main__':
     import logging
     logging.basicConfig(level=0)
