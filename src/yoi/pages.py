@@ -1,6 +1,6 @@
 from __future__ import unicode_literals, division
 
-from datetime import date
+from datetime import date, datetime
 from flask import g, request, url_for, redirect, flash, jsonify
 from flaskext.genshi import render_response
 from random import randrange
@@ -72,7 +72,7 @@ def random_identifier():
     return '%06x' % randrange(0x100000, 0xffffff)
 
 def create_event(form):
-    event = Event(name=form.name.data)
+    event = Event(name=form.name.data, created=datetime.utcnow())
     event.external_id = random_identifier()
     app.db.session.add(event)
     app.db.session.flush()  # need event.id
