@@ -275,6 +275,10 @@ def new_entry(external_id, slug):
 
     return render_response('new-entry.html', {'form': form, 'event': event})
 
+@app.route('/admin/')
+def admin_index():
+    return render_response('admin/index.html')
+
 @app.route('/admin/user/')
 def admin_list_users():
     users = (app.db.session
