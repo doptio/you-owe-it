@@ -275,7 +275,7 @@ def new_entry(external_id, slug):
 
     return render_response('new-entry.html', {'form': form, 'event': event})
 
-@app.route('/admin/users')
+@app.route('/admin/user/')
 def admin_list_users():
     users = (app.db.session
                 .query(app.db.User)
@@ -283,3 +283,12 @@ def admin_list_users():
                           app.db.User.id.desc())
                 .all())
     return render_response('admin/users.html', {'users': users})
+
+@app.route('/admin/event/')
+def admin_list_events():
+    events = (app.db.session
+                .query(Event)
+                .order_by(Event.created.desc(),
+                          Event.id.desc())
+                .all())
+    return render_response('admin/events.html', {'events': events})

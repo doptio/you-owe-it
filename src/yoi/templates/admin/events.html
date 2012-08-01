@@ -1,0 +1,31 @@
+<html xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      id='admin-section users-page'>
+<xi:include href='../page.html'/>
+<head/>
+<body class='widget-app'>
+  <div id='content'>
+    <div class='row'>
+      <div class='eight columns'>
+        <h1>events</h1>
+
+        <table>
+          <thead>
+            <th>#</th>
+            <th>created</th>
+            <th>name</th>
+          </thead>
+
+          <tbody>
+            <tr py:for='event in events'>
+              <td>${event.id}</td>
+              <td>${event.created.strftime('%Y-%m-%d')}</td>
+              <td>${event.name}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
