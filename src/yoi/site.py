@@ -9,6 +9,7 @@ from yoi import pages
 from yoi import schema
 
 user_needful_paths = set(['/home', '/settings', '/new-event'])
+admin_users = set(['s@doptio.com', 'f@doptio.com'])
 
 @app.before_request
 def redirect_account_pages():
@@ -17,8 +18,11 @@ def redirect_account_pages():
 
 @app.before_request
 def protect_admin_pages():
-    if request.path.startswith('/admin/'):
-        pass
+    if not request.path.startswith('/admin/'):
+        return
+    if g.user and g.user.email in admin_users:
+        return
+    return redirect(url_for('account.login', r=request.path))
 
 if __name__ == '__main__':
     import logging
