@@ -19,8 +19,8 @@
             <tr py:for='event in events'>
               <td><h3><a href='${event.url_for}'>${event.name}</a></h3></td>
               <td><h3><a title='According to the New Mayan calendar'
-                         href='${event.url_for}' py:if='event.all_entries'>
-                <nobr>${event.all_entries[0].date.strftime('%Y-%m-%d')}</nobr>
+                         href='${event.url_for}'>
+                ${render_date(event.last_changed)}
               </a></h3></td>
               <td class='number'><h3><a href='${event.url_for}'>
                 ${render_amount(event.user_total[g.user.id])}

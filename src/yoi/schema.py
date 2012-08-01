@@ -114,6 +114,12 @@ class Event(app.db.Model):
                     for person in self.members
                     if person.user_id)
 
+    @cached_property
+    def last_changed(self):
+        if not self.all_entries:
+            return
+        return self.all_entries[0].date
+
 class Person(app.db.Model):
     '''People are the association between events and user.
 

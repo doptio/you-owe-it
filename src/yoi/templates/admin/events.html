@@ -13,13 +13,15 @@
           <thead>
             <th>#</th>
             <th>created</th>
+            <th>updated</th>
             <th>name</th>
           </thead>
 
           <tbody>
             <tr py:for='event in events'>
               <td>${event.id}</td>
-              <td>${event.created.strftime('%Y-%m-%d')}</td>
+              <td>${render_date(event.created)}</td>
+              <td>${render_date(event.last_changed)}</td>
               <td>${event.name}</td>
             </tr>
           </tbody>

@@ -8,6 +8,10 @@
     return 'http://www.gravatar.com/avatar/{}?size={}'.format(hash, size)
 ?>
 
+<py:def function='render_date(dt, if_none="")'>
+  <nobr>${dt.strftime('%Y-%m-%d') if dt else if_none}</nobr>
+</py:def>
+
 <py:def function='render_avatar_img(person, size=60)'>
   <img src='${avatar_url(person.email, size=size)}'
        class='avatar-img' width='${size}' height='${size}'
@@ -58,7 +62,7 @@
                                    slug=event.slug,
                                    entry_id=entry.id)'>
       <tr>
-        <td><a href='${link}'><nobr>${entry.date.strftime('%Y-%m-%d')}</nobr></a></td>
+        <td><a href='${link}'>${render_date(entry.date)}</a></td>
         <td class='number'>
           <a href='${link}'>${render_amount(entry.amount)}</a>
         </td>

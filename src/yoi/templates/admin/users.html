@@ -20,7 +20,7 @@
           <tbody>
             <tr py:for='user in users'>
               <td>${user.id}</td>
-              <td>${user.created.strftime('%Y-%m-%d')}</td>
+              <td>${render_date(user.created)}</td>
               <td>${user.email}</td>
               <td>${user.name}</td>
             </tr>
