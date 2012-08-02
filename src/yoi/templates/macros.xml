@@ -2,10 +2,12 @@
 
 <?python
   from hashlib import md5
+  from urllib import urlencode
 
-  def avatar_url(email, size=60):
+  def avatar_url(email, **kwargs):
     hash = md5((email or '').lower()).hexdigest()
-    return 'http://www.gravatar.com/avatar/{}?size={}'.format(hash, size)
+    qs = urlencode(kwargs)
+    return 'http://www.gravatar.com/avatar/{}?{}'.format(hash, qs)
 ?>
 
 <py:def function='render_date(dt, if_none="")'>
@@ -13,7 +15,9 @@
 </py:def>
 
 <py:def function='render_avatar_img(person, size=60)'>
-  <img src='${avatar_url(person.email, size=size)}'
+  <img src='${avatar_url(person.email,
+                         size=size,
+                         default="retro" if person.user_id else "mm")}'
        class='avatar-img' width='${size}' height='${size}'
        alt="${person.name}'s avatar"/>
 </py:def>
