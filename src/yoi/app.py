@@ -2,6 +2,9 @@ from __future__ import unicode_literals, division
 
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
+import os
+from raven import Client
+from raven.middleware import Sentry
 
 from yoi.account.user import bp as account
 from yoi.config import secret, testing, database_url, use_debugger
@@ -20,3 +23,11 @@ app.config['PROPAGATE_EXCEPTIONS'] = True
 #app.config['CSRF_ENABLED'] = not testing
 app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SECRET_KEY'] = secret
+
+# Error-reporting middleware
+if 'SENTRY_URL' in os.environ:
+    app.wsgi_app = Sentry(app.wsgi_app, Client(
+        servers=[os.environ['SENTRY_URL']],
+        key=os.environ['SENTRY_KEY'],
+        site='uowe.it',
+    ))
