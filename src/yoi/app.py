@@ -9,9 +9,10 @@ from raven.middleware import Sentry
 from yoi.account.user import bp as account
 from yoi.config import secret, testing, database_url, use_debugger
 from yoi.flask_genshi import Genshi, render_response
+from yoi import middleware
 
 app = Flask(__name__)
-genshi = Genshi(app)
+app.genshi = Genshi(app)
 app.db = SQLAlchemy(app)
 
 app.register_blueprint(account)
@@ -36,3 +37,12 @@ if 'SENTRY_URL' in os.environ:
         key=os.environ['SENTRY_KEY'],
         site='uowe.it',
     ))
+
+# Nice 'Internal Server Error' page
+error_page = (app.genshi
+                .template_loader.load('500.html')
+                .generate(g={'user': None},
+                          get_flashed_messages=lambda **kwargs: [])
+                .render('html'))
+if os.environ.get('ENVIRONMENT') == 'production':
+    app.wsgi_app = middleware.error_page(app.wsgi_app, error_page)
