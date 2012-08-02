@@ -63,6 +63,17 @@ class Event(app.db.Model):
                        external_id=self.external_id,
                        slug=self.slug)
 
+    def get_or_create_person(self, name):
+        person = (app.db.session
+                    .query(Person)
+                    .filter_by(event=self.id, name=name)
+                    .first())
+        if not person:
+            person = Person(event=self.id, name=name)
+            app.db.session.add(person)
+            app.db.session.flush()
+        return person
+
     @cached_property
     def members(self):
         rows = (app.db.session

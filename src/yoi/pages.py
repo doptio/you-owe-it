@@ -11,7 +11,8 @@ from yoi.app import app
 from yoi.schema import Event, Person, Entry, EntryVictim
 from yoi.wtf import Form, TextField, Required, Optional, Email, Length, \
                     Field, IntegerField, BooleanField, \
-                    DecimalField, NumberRange, DateField, ListOf
+                    DecimalField, NumberRange, DateField, ListOf, \
+                    FileField
 
 @app.route('/')
 def index():
@@ -276,6 +277,63 @@ def new_entry(external_id, slug):
         flash('entry not added', 'alert')
 
     return render_response('new-entry.html', {'form': form, 'event': event})
+
+def import_csv(event, data):
+    count = 0
+    for count, line in enumerate(data):
+        try:
+            pieces = line.strip().decode('utf-8').split(';', 4)
+            date, amount, payer, victims, description = pieces
+        except Exception:
+            raise ValueError('Bad CSV line: %r' % line)
+
+        entry = Entry()
+        entry.event = event.id
+        entry.payer = event.get_or_create_person(payer).id
+        entry.date = datetime.strptime(date, '%d-%m-%Y')
+        entry.description = description
+        entry.manual_entry = False
+        entry.amount = int(float(amount) * 100)
+        app.db.session.add(entry)
+        app.db.session.flush()
+
+        for victim in victims.split(','):
+            victim, shares = victim.split('=')
+            victim = event.get_or_create_person(victim).id
+            shares = int(shares)
+            app.db.session.add(EntryVictim(entry=entry.id,
+                                           victim=victim,
+                                           share=shares))
+
+    return count
+
+class ImportForm(Form):
+    csv_file = FileField('CSV File',
+                         validators=[Required()])
+
+@app.route('/<external_id>/<slug>/import', methods=['GET', 'POST'])
+def import_entries(external_id, slug):
+    event = Event.find(external_id)
+
+    form = ImportForm()
+    if form.validate_on_submit():
+        try:
+            count = import_csv(event, request.files['csv_file'])
+        except ValueError, e:
+            request.log.warn('Bad CSV file', exc_info=True)
+            form.errors['csv_file'] = form.csv_file.errors = [e.args[0]]
+        else:
+            app.db.session.commit()
+
+            flash('%d entries imported' % count)
+            return redirect(event.url_for)
+
+    if form.errors:
+        request.log.debug('form errors: %r', form.errors)
+        flash('there were errors', 'alert')
+
+    return render_response('import-entries.html',
+                           {'form': form, 'event': event})
 
 @app.route('/admin/')
 def admin_index():

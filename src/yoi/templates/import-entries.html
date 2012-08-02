@@ -1,0 +1,31 @@
+<html xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<xi:include href='page.html'/>
+
+<head/>
+<body class='widget-app'>
+  <div id='content'>
+    <div>
+      <h1>${event.name} &ndash; import entries</h1>
+
+      <form method='POST' enctype='multipart/form-data'
+            action='${url_for("import_entries",
+                              external_id=event.external_id,
+                              slug=event.slug)}'>
+        ${form.csrf_token}
+
+        <div>
+          ${render_field(form.csv_file)}
+        </div>
+
+        <div>
+          <input type='submit'
+                 class='nice large radius button'
+                 value='Import'/>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
