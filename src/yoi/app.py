@@ -8,7 +8,7 @@ from raven.middleware import Sentry
 
 from yoi.account.user import bp as account
 from yoi.config import secret, testing, database_url, use_debugger
-from yoi.flask_genshi import Genshi
+from yoi.flask_genshi import Genshi, render_response
 
 app = Flask(__name__)
 genshi = Genshi(app)
@@ -23,6 +23,11 @@ app.config['PROPAGATE_EXCEPTIONS'] = True
 #app.config['CSRF_ENABLED'] = not testing
 app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SECRET_KEY'] = secret
+
+# Nice error pages
+@app.errorhandler(404)
+def not_found(e):
+    return render_response('404.html'), 404
 
 # Error-reporting middleware
 if 'SENTRY_URL' in os.environ:
