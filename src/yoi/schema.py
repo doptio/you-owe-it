@@ -154,8 +154,7 @@ class Entry(app.db.Model):
     # frontend 'edit entry' UI can recreate the original entry state.
     manual_entry = app.db.Column(app.db.Boolean, nullable=False)
     # Amounts are stored with cents precision, so we store them as integers.
-    amount = app.db.Column(app.db.Integer,
-                           CheckConstraint('amount > 0'), nullable=False)
+    amount = app.db.Column(app.db.Integer, nullable=False)
 
 class EntryVictim(app.db.Model):
     id = app.db.Column(app.db.Integer, primary_key=True)
