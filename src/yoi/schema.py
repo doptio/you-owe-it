@@ -3,8 +3,10 @@ from flask import url_for
 from sqlalchemy import sql
 from sqlalchemy import Column, Integer, String, \
                        CheckConstraint, ForeignKey, UniqueConstraint
+from sqlalchemy.orm.exc import NoResultFound
 import translitcodec  # imported to get the translit/long encoding
 from werkzeug import cached_property
+from werkzeug.exceptions import NotFound
 
 from yoi.app import app
 
@@ -40,6 +42,13 @@ class Event(app.db.Model):
                     .query(cls)
                     .filter_by(external_id=external_id)
                     .one())
+
+    @classmethod
+    def find_or_404(self, external_id):
+        try:
+            return self.find(external_id)
+        except NoResultFound:
+            raise NotFound()
 
     @classmethod
     def for_user(cls, user_id):

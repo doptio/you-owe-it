@@ -112,7 +112,7 @@ class EmptyForm(Form):
 
 @app.route('/<external_id>/<slug>/')
 def event(external_id, slug):
-    event = Event.find(external_id)
+    event = Event.find_or_404(external_id)
     return render_response('event.html', {
         'event': event,
         'form': EmptyForm(),
@@ -120,11 +120,11 @@ def event(external_id, slug):
 
 @app.route('/<external_id>/<slug>/entry/')
 def all_entries(external_id, slug):
-    event = Event.find(external_id)
+    event = Event.find_or_404(external_id)
     return render_response('all-entries.html', {'event': event})
 
 def requested_entry(external_id, entry_id):
-    event = Event.find(external_id)
+    event = Event.find_or_404(external_id)
     try:
         entry, = [entry
                   for entry in event.all_entries
@@ -161,7 +161,7 @@ class AddPeopleForm(Form):
 
 @app.route('/<external_id>/<slug>/add-people', methods=['POST'])
 def add_people(external_id, slug):
-    event = Event.find(external_id)
+    event = Event.find_or_404(external_id)
     form = AddPeopleForm()
 
     if form.validate_on_submit():
@@ -182,7 +182,7 @@ def join_event(external_id, slug):
     form = JoinEventForm()
 
     if form.validate_on_submit():
-        event = Event.find(external_id)
+        event = Event.find_or_404(external_id)
         if form.person.data:
             person = Person.get(form.person.data)
             if person.event != event.id:
@@ -259,7 +259,7 @@ def create_entry(event, form):
 
 @app.route('/<external_id>/<slug>/entry/new', methods=['GET', 'POST'])
 def new_entry(external_id, slug):
-    event = Event.find(external_id)
+    event = Event.find_or_404(external_id)
 
     request.log.debug('data: %r', request.form)
     form = NewEntryForm()
@@ -315,7 +315,7 @@ class ImportForm(Form):
 
 @app.route('/<external_id>/<slug>/import', methods=['GET', 'POST'])
 def import_entries(external_id, slug):
-    event = Event.find(external_id)
+    event = Event.find_or_404(external_id)
 
     form = ImportForm()
     if form.validate_on_submit():
