@@ -280,7 +280,9 @@ def new_entry(external_id, slug):
 
 def import_csv(event, data):
     count = 0
-    for count, line in enumerate(data):
+    for line in data:
+        count += 1
+
         try:
             pieces = line.strip().decode('utf-8').split(';', 4)
             date, amount, payer, victims, description = pieces
