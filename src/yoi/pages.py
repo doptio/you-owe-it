@@ -358,3 +358,7 @@ def admin_list_events():
                           Event.id.desc())
                 .all())
     return render_response('admin/events.html', {'events': events})
+
+@app.route('/admin/uncaught-exception')
+def admin_uncaught_exception():
+    raise AssertionError('2 + 2 != 5')
