@@ -32,11 +32,7 @@ def not_found(e):
 
 # Error-reporting middleware
 if 'SENTRY_URL' in os.environ:
-    app.wsgi_app = Sentry(app.wsgi_app, Client(
-        servers=[os.environ['SENTRY_URL']],
-        key=os.environ['SENTRY_KEY'],
-        site='uowe.it',
-    ))
+    app.wsgi_app = Sentry(app.wsgi_app, Client(os.environ['SENTRY_URL']))
 
 # Nice 'Internal Server Error' page
 error_page = (app.genshi
