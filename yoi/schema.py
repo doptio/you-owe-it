@@ -52,14 +52,14 @@ class Event(app.db.Model):
             raise NotFound()
 
     @classmethod
-    def for_user(cls, user_id):
-        return (app.db.session
+    def for_user(cls, user_id, include_closed):
+        users_events = sql.select([Person.event], Person.user == user_id)
+        query = (app.db.session
                     .query(Event)
-                    .filter(Event.id.in_(
-                                sql.select([Person.event],
-                                           Person.user == user_id)))
-                    .order_by(Event.name)
-                    .all())
+                    .filter(Event.id.in_(users_events)))
+        if not include_closed:
+            query = query.filter(Event.closed == None)
+        return query.order_by(Event.name).all()
 
     @property
     def slug(self):

@@ -26,7 +26,12 @@ def tour():
 
 @app.route('/home')
 def home():
-    return render_response('home.html', {'events': Event.for_user(g.user.id)})
+    show_closed = bool(request.args.get('show-closed'))
+    events = Event.for_user(g.user.id, show_closed)
+    return render_response('home.html', {
+        'events': events,
+        'show_closed': show_closed,
+    })
 
 def clear_if_empty(v):
     if not v:

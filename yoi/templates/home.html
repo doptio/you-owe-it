@@ -16,8 +16,7 @@
 
         <table py:if='events'>
           <tbody>
-            <tr py:for='event in events'
-                py:if='not event.closed'>
+            <tr py:for='event in events'>
               <td><h3><a href='${event.url_for}'>${event.name}</a></h3></td>
               <td><h3><a title='According to the New Mayan calendar'
                          href='${event.url_for}'>
@@ -30,7 +29,20 @@
           </tbody>
         </table>
 
-        <a href='/new-event' class='large radius button'>Create new event</a>
+        <ul class='button-group radius'>
+          <li>
+            <a href='/new-event'
+               class='large radius button'>Create new event</a>
+          </li>
+          <li py:if='not show_closed'>
+            <a href='?show-closed=true'
+               class='large radius button'>Show closed events</a>
+          </li>
+          <li py:if='show_closed'>
+            <a href='?'
+               class='large radius button'>Hide closed events</a>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
