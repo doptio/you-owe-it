@@ -16,7 +16,8 @@
 
         <table py:if='events'>
           <tbody>
-            <tr py:for='event in events'>
+            <tr py:for='event in events'
+                py:if='not event.closed'>
               <td><h3><a href='${event.url_for}'>${event.name}</a></h3></td>
               <td><h3><a title='According to the New Mayan calendar'
                          href='${event.url_for}'>

@@ -29,6 +29,7 @@ Member = namedtuple('Member', 'person_id name email amount user_id')
 class Event(app.db.Model):
     id = app.db.Column(app.db.Integer, primary_key=True)
     created = app.db.Column(app.db.DateTime, nullable=False)
+    closed = app.db.Column(app.db.DateTime, nullable=True)
     external_id = app.db.Column(app.db.String, nullable=False, unique=True)
     name = app.db.Column(app.db.String)
 

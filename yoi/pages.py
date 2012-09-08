@@ -156,6 +156,17 @@ def delete_entry(external_id, slug, entry_id):
 
     return redirect(event.url_for)
 
+@app.route('/<external_id>/<slug>/close', methods=['POST'])
+def close_event(external_id, slug):
+    if not EmptyForm().validate_on_submit():
+        return 'Bad request', 400
+
+    event = Event.find_or_404(external_id)
+    event.closed = datetime.utcnow()
+    app.db.session.commit()
+
+    return jsonify(success=True)
+
 class AddPeopleForm(Form):
     people = ListOf(TextField(validators=[Length(min=1, max=42)]))
 

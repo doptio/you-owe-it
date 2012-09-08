@@ -145,6 +145,13 @@ $(document).ready(function() {
     });
 });
 
+/* Magic for 'Close event' dialog */
+$(document).ready(function() {
+    $('#close-event').on('dialog-ok', function() {
+        Yoi.post('close', {}, function() { document.location = '/home'; });
+    });
+});
+
 /* Generic dialogs */
 $(document).ready(function() {
     var dialogs = {};
