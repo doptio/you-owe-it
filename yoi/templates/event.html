@@ -65,6 +65,7 @@
       <ol class='input-fix input-auto-repeat'>
         <li><input type='text' name='name' placeholder='name'/></li>
       </ol>
+      <button data-event='dialog-ok'>Ok</button>
     </div>
 
     <div id='invite-friends' class='dialog'>
@@ -73,6 +74,7 @@
       <div style='padding: .5em 2em;'>
         <a href='${request.base_url}'>${request.base_url}</a>
       </div>
+      <button data-event='dialog-ok'>Ok</button>
     </div>
 
     <div id='join' class='dialog'>
@@ -82,6 +84,7 @@
           <a href='#'>${render_avatar(person)}</a>
         </li>
       </ul>
+      <button data-event='dialog-ok'>Ok</button>
     </div>
   </div>
 </body>

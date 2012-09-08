@@ -151,15 +151,23 @@ $(document).ready(function() {
     $('.dialog').each(function(i, e) {
         var self = $(this);
         var title = self.find('h1').remove().text();
+
+        var buttons = {};
+        self.find('button').remove().each(function() {
+            var btn = $(this);
+            var event = btn.data('event');
+            buttons[btn.text()] = function() {
+                self.trigger(event);
+                self.dialog('close');
+            };
+        });
+
         var dialog_opts = {
             title: title,
             autoOpen: false,
             width: '50%',
             modal: true,
-            buttons: { Ok: function() {
-                self.trigger('dialog-ok');
-                self.dialog('close');
-            } }
+            buttons: buttons
         };
         dialogs[this.id] = self.dialog(dialog_opts);
     });
