@@ -1,5 +1,5 @@
 #!/bin/sh
 
-cd `dirname $0`
+cd `dirname $0`/..
 
-./manage.py migrate
+bin/manage.py migrate
