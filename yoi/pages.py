@@ -9,8 +9,8 @@ from werkzeug.exceptions import BadRequest, NotFound
 
 from yoi.app import app
 from yoi.schema import Event, Person, Entry, EntryVictim
-from yoi.wtf import Form, TextField, Required, Optional, Email, Length, \
-                    Field, IntegerField, BooleanField, \
+from yoi.wtf import Form, TextField, Required, Optional, AnyOf, Email, \
+                    Length, Field, IntegerField, BooleanField, \
                     DecimalField, NumberRange, DateField, ListOf, \
                     FileField
 
@@ -115,13 +115,35 @@ class EmptyForm(Form):
     'I am an empty form. Use me to generate CSRF tokens.'
     pass
 
-@app.route('/<external_id>/<slug>/')
+class EventForm(Form):
+    action = TextField('action',
+                       validators=[Required(),
+                                   AnyOf(['close', 'reopen'])])
+
+    def update_event(self, event):
+        if self.action.data == 'close':
+            event.closed = datetime.utcnow()
+        elif self.action.data == 'reopen':
+            event.closed = None
+        else:
+            raise ValueError('Huh?!')
+
+@app.route('/<external_id>/<slug>/', methods=['GET', 'POST'])
 def event(external_id, slug):
     event = Event.find_or_404(external_id)
-    return render_response('event.html', {
-        'event': event,
-        'form': EmptyForm(),
-    })
+
+    form = EventForm()
+    if form.validate_on_submit():
+        form.update_event(event)
+        app.db.session.commit()
+
+    if request.is_xhr:
+        return jsonify(success=True)
+    else:
+        return render_response('event.html', {
+            'event': event,
+            'form': EmptyForm(),
+        })
 
 @app.route('/<external_id>/<slug>/entry/')
 def all_entries(external_id, slug):
@@ -160,17 +182,6 @@ def delete_entry(external_id, slug, entry_id):
     app.db.session.commit()
 
     return redirect(event.url_for)
-
-@app.route('/<external_id>/<slug>/close', methods=['POST'])
-def close_event(external_id, slug):
-    if not EmptyForm().validate_on_submit():
-        return 'Bad request', 400
-
-    event = Event.find_or_404(external_id)
-    event.closed = datetime.utcnow()
-    app.db.session.commit()
-
-    return jsonify(success=True)
 
 class AddPeopleForm(Form):
     people = ListOf(TextField(validators=[Length(min=1, max=42)]))

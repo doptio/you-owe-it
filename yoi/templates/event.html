@@ -12,9 +12,12 @@
                    g.user.id in [member.user_id for member in event.members])
     ?>
 
-    <div style='float: right;'
-         py:if='not event.closed'>
-      <a class='large alert button radius for-dialog'
+    <div style='float: right;'>
+      <a py:if='event.closed'
+         class='large success button radius for-dialog'
+         data-dialog='reopen-event' href='#'>Re-open event</a>
+      <a py:if='not event.closed'
+         class='large alert button radius for-dialog'
          data-dialog='close-event' href='#'>Close event</a>
     </div>
     <ul class='button-group radius' py:if='is_member'>
@@ -84,9 +87,17 @@
 
     <div id='close-event' class='dialog'>
       <h1>Really close event?</h1>
-      <p>A closed event will no longer be listed on members Home screen.</p>
+      <p>A closed event will no longer be listed on its members Home
+      screen.</p>
       <button data-event='dialog-canel'>Cancel</button>
       <button data-event='dialog-ok'>Close event</button>
+    </div>
+
+    <div id='reopen-event' class='dialog'>
+      <h1>Really re-open event?</h1>
+      <p>The event will be listed on all its members Home screen.</p>
+      <button data-event='dialog-canel'>Cancel</button>
+      <button data-event='dialog-ok'>Re-open event</button>
     </div>
 
     <div id='join' class='dialog'>

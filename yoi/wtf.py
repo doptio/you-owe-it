@@ -2,7 +2,7 @@ from flaskext import wtf
 from flaskext.wtf import Form, Field, IntegerField, BooleanField, \
                          DateField, DecimalField, FileField
 from flaskext.wtf import Required, Optional, Length, NumberRange, Email, \
-                         Regexp
+                         Regexp, AnyOf
 
 class DecimalField(wtf.DecimalField):
     'A decial field that treats "," and "." alike.'

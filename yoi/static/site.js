@@ -145,10 +145,17 @@ $(document).ready(function() {
     });
 });
 
-/* Magic for 'Close event' dialog */
+/* Magic for 'Close event' and 'Re-open event' dialogs */
 $(document).ready(function() {
     $('#close-event').on('dialog-ok', function() {
-        Yoi.post('close', {}, function() { document.location = '/home'; });
+        Yoi.post('', {action: 'close'}, function() {
+            document.location = '/home'
+        });
+    });
+    $('#reopen-event').on('dialog-ok', function() {
+        Yoi.post('', {action: 'reopen'}, function() {
+            document.location.reload()
+        });
     });
 });
 
