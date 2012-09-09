@@ -6,6 +6,7 @@ from yoi.app import app
 from yoi import authentication
 from yoi import request_log
 from yoi import pages
+from yoi.resources import static_url
 from yoi import schema
 
 user_needful_paths = set(['/home', '/settings', '/new-event'])
@@ -23,6 +24,11 @@ def protect_admin_pages():
     if g.user and g.user.email in admin_users:
         return
     return redirect(url_for('account.login', r=request.path))
+
+# Add `static_url` to template context.
+@app.context_processor
+def context_static_url():
+    return dict(static_url=static_url)
 
 if __name__ == '__main__':
     import logging
