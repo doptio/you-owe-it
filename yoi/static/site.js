@@ -157,6 +157,11 @@ $(document).ready(function() {
             document.location.reload()
         });
     });
+    $('#leave-event').on('dialog-ok', function() {
+        Yoi.post('', {action: 'leave'}, function() {
+            document.location.reload()
+        });
+    });
 });
 
 /* Generic dialogs */
@@ -229,8 +234,8 @@ Yoi.ajax_error_handler = function() {
 /* Magic for "Join Event" dialog */
 $(document).ready(function() {
     function ajax_join(person_id) {
-        Yoi.post('join',
-                 {person: person_id || ''},
+        Yoi.post('',
+                 {action: 'join', person: person_id || ''},
                  function() { document.location.reload() });
     }
 

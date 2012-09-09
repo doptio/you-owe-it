@@ -118,15 +118,43 @@ class EmptyForm(Form):
 class EventForm(Form):
     action = TextField('action',
                        validators=[Required(),
-                                   AnyOf(['close', 'reopen'])])
+                                   AnyOf(['close', 'reopen',
+                                          'join', 'leave'])])
+    person = IntegerField('person', validators=[Optional()])
 
     def update_event(self, event):
         if self.action.data == 'close':
             event.closed = datetime.utcnow()
         elif self.action.data == 'reopen':
             event.closed = None
+        elif self.action.data == 'join':
+            join_event(event, g.user, self.person.data)
+        elif self.action.data == 'leave':
+            leave_event(event, g.user)
         else:
             raise ValueError('Huh?!')
+
+def join_event(event, user, person_id):
+    if person_id:
+        person = Person.get(person_id)
+        if person.event != event.id:
+            request.log.info('person.event != event.id')
+            raise BadRequest()
+        if person.user:
+            request.log.info('person.user != None')
+            raise BadRequest()
+        person.user = g.user.id
+
+    else:
+        person = Person(event=event.id, name=g.user.name, user=g.user.id)
+        app.db.session.add(person)
+
+def leave_event(event, user):
+    person = (app.db.session
+                .query(Person)
+                .filter_by(event=event.id, user=user.id)
+                .one())
+    person.user = None
 
 @app.route('/<external_id>/<slug>/', methods=['GET', 'POST'])
 def event(external_id, slug):
@@ -194,36 +222,6 @@ def add_people(external_id, slug):
     if form.validate_on_submit():
         for person in form.people.data:
             app.db.session.add(Person(event=event.id, name=person))
-        app.db.session.commit()
-
-        return jsonify(success=True)
-
-    request.log.info('form not valid: %r', form.errors)
-    raise BadRequest()
-
-class JoinEventForm(Form):
-    person = IntegerField('person', validators=[Optional()])
-
-@app.route('/<external_id>/<slug>/join', methods=['POST'])
-def join_event(external_id, slug):
-    form = JoinEventForm()
-
-    if form.validate_on_submit():
-        event = Event.find_or_404(external_id)
-        if form.person.data:
-            person = Person.get(form.person.data)
-            if person.event != event.id:
-                request.log.info('person.event != event.id')
-                raise BadRequest()
-            if person.user:
-                request.log.info('person.user != None')
-                raise BadRequest()
-            person.user = g.user.id
-
-        else:
-            person = Person(event=event.id, name=g.user.name, user=g.user.id)
-            app.db.session.add(person)
-
         app.db.session.commit()
 
         return jsonify(success=True)

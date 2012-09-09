@@ -12,13 +12,22 @@
                    g.user.id in [member.user_id for member in event.members])
     ?>
 
-    <div style='float: right;'>
+    <div style='float: right;' py:if='is_member'>
       <a py:if='event.closed'
          class='large success button radius for-dialog'
          data-dialog='reopen-event' href='#'>Re-open event</a>
-      <a py:if='not event.closed'
-         class='large alert button radius for-dialog'
-         data-dialog='close-event' href='#'>Close event</a>
+      <ul class='button-group radius' py:if='not event.closed'>
+        <li>
+          <a py:if='not event.closed'
+             class='large alert button radius for-dialog'
+             data-dialog='leave-event' href='#'>Leave event</a>
+        </li>
+        <li>
+          <a py:if='not event.closed and is_member'
+             class='large alert button radius for-dialog'
+             data-dialog='close-event' href='#'>Close event</a>
+        </li>
+      </ul>
     </div>
     <ul class='button-group radius' py:if='is_member'>
       <li><a class='large button for-dialog'
@@ -83,6 +92,13 @@
         <a href='${request.base_url}'>${request.base_url}</a>
       </div>
       <button data-event='dialog-ok'>Ok</button>
+    </div>
+
+    <div id='leave-event' class='dialog'>
+      <h1>Really leave event?</h1>
+      <p>This event will no longer be listed on your Home screen.</p>
+      <button data-event='dialog-canel'>Cancel</button>
+      <button data-event='dialog-ok'>Leave event</button>
     </div>
 
     <div id='close-event' class='dialog'>
