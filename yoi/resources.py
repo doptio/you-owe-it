@@ -8,7 +8,7 @@ from yoi.config import in_production
 # Sane version of `url_for` for /static/ URLs (i.e. one we can actually hook
 # into.)
 def static_url(filename):
-    if in_production or True:
+    if in_production:
         file_path = os.path.join(current_app.static_folder, filename)
         q = int(os.stat(file_path).st_mtime)
         return url_for('static', filename=filename, q=q)
