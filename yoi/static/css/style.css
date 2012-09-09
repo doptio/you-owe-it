@@ -109,6 +109,14 @@ table tbody tr:nth-child(even):hover {
 .green {
     color: green;
 }
+.removed {
+    text-decoration: line-through;
+    text-decoration-color: red;
+    -moz-text-decoration-color: red;
+    -webkit-text-decoration-color: red;
+    -ms-text-decoration-color: red;
+    -o-text-decoration-color: red;
+}
 
 .dialog {
     display: none;
@@ -180,6 +188,16 @@ table.entries tbody:hover {
 }
 
 /* The journal page */
+#journal-page .remove-person {
+    display: none;
+    position: absolute;
+    padding: 2px;
+    color: #C60F13;
+}
+#journal-page #overview li:hover .remove-person {
+    display: block;
+}
+
 #journal-page #overview li {
     /* h3 sized */
     line-height: 1;

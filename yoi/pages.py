@@ -119,7 +119,8 @@ class EventForm(Form):
     action = TextField('action',
                        validators=[Required(),
                                    AnyOf(['close', 'reopen',
-                                          'join', 'leave'])])
+                                          'join', 'leave',
+                                          'remove-person'])])
     person = IntegerField('person', validators=[Optional()])
 
     def update_event(self, event):
@@ -131,6 +132,10 @@ class EventForm(Form):
             join_event(event, g.user, self.person.data)
         elif self.action.data == 'leave':
             leave_event(event, g.user)
+        elif self.action.data == 'remove-person':
+            person = Person.get(self.person.data)
+            person.removed = datetime.utcnow()
+            person.user = None
         else:
             raise ValueError('Huh?!')
 
@@ -166,6 +171,8 @@ def event(external_id, slug):
         app.db.session.commit()
 
     if request.is_xhr:
+        if form.errors:
+            return bad_request()
         return jsonify(success=True)
     else:
         return render_response('event.html', {

@@ -164,12 +164,30 @@ $(document).ready(function() {
     });
 });
 
+/* Magic for remove members from events */
+$(document).ready(function() {
+    var current_person;
+    $('.remove-person').on('activate click', function(ev) {
+        current_person = $(this).data('values');
+        $('#remove-person-name').text(current_person.name);
+    });
+    $('#remove-person').on('dialog-ok', function() {
+        var values = {
+            action: 'remove-person',
+            person: current_person.person
+        };
+        Yoi.post('', values, function() {
+            document.location.reload()
+        });
+    });
+});
+
 /* Generic dialogs */
 $(document).ready(function() {
     var dialogs = {};
     $('.dialog').each(function(i, e) {
         var self = $(this);
-        var title = self.find('h1').remove().text();
+        var title = self.find('h1').remove().html();
 
         var buttons = {};
         self.find('button').remove().each(function() {

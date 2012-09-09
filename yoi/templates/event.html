@@ -53,7 +53,12 @@
     <div class='panel radius'>
       <h2>members</h2>
       <ul id='overview' class='block-grid three-up'>
-        <li py:for='person in event.members'>
+        <li py:for='person in event.members'
+            py:if='not person.removed'>
+          <a data-dialog='remove-person'
+             data-values='${json.dumps({"person": person.person_id,
+                                        "name": person.name})}'
+             href='#' class='remove-person for-dialog'>&times;</a>
           ${render_avatar_img(person)}
           ${person.name}<br/>
           ${render_amount(event.person_total[person.person_id])}
@@ -114,6 +119,15 @@
       <p>The event will be listed on all its members Home screen.</p>
       <button data-event='dialog-canel'>Cancel</button>
       <button data-event='dialog-ok'>Re-open event</button>
+    </div>
+
+    <div id='remove-person' class='dialog'>
+      <h1>Really remove <span id='remove-person-name'/>?</h1>
+      <p>When you remove a person from an event they will still figure in any
+      entries they were added to, and their current balance will still be
+      outstanding, they will just no longer be listed as a member.</p>
+      <button data-event='dialog-canel'>Cancel</button>
+      <button data-event='dialog-ok'>Begone with them!</button>
     </div>
 
     <div id='join' class='dialog'>

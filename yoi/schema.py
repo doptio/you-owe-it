@@ -24,7 +24,7 @@ def slugify(text, delim=u'-'):
     return unicode(delim.join(result))
 
 # Member is a synthetic object describing the members of events.
-Member = namedtuple('Member', 'person_id name email amount user_id')
+Member = namedtuple('Member', 'person_id removed name email amount user_id')
 
 class Event(app.db.Model):
     id = app.db.Column(app.db.Integer, primary_key=True)
@@ -87,13 +87,13 @@ class Event(app.db.Model):
     @cached_property
     def members(self):
         rows = (app.db.session
-                    .query(Person.id, Person.name,
+                    .query(Person.id, Person.removed, Person.name,
                            app.db.User.name, app.db.User.email,
                            app.db.User.id)
                     .outerjoin(app.db.User)
                     .filter(Person.event == self.id)
                     .order_by(Person.name))
-        return [Member(row[0], row[1] or row[2], row[3], 0.0, row[4])
+        return [Member(row[0], row[1], row[2] or row[3], row[4], 0.0, row[5])
                 for row in rows]
 
     @cached_property
@@ -153,6 +153,7 @@ class Person(app.db.Model):
     user = app.db.Column(app.db.Integer, ForeignKey('user.id'),
                          nullable=True)
     name = app.db.Column(app.db.String, nullable=False)
+    removed = app.db.Column(app.db.DateTime, nullable=True)
 
     __table_args__ = (
         UniqueConstraint('event', 'user'),

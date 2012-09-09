@@ -70,7 +70,9 @@
         <td class='number'>
           <a href='${link}'>${render_amount(entry.amount)}</a>
         </td>
-        <td><a href='${link}'>${people[entry.payer].name}</a></td>
+        <td class='${"removed" if people[entry.payer].removed else None}'>
+          <a href='${link}'>${people[entry.payer].name}</a>
+        </td>
         <td><a href='${link}'>${entry.description}</a></td>
       </tr>
       <tr py:for='victim in entry.victims'>
@@ -79,7 +81,9 @@
                                                * victim.share / total_shares'>
           <a href='${link}'>${render_amount(amount)}</a>
         </td>
-        <td><a href='${link}'>${people[victim.victim].name}</a></td>
+        <td class='${"removed" if people[victim.victim].removed else None}'>
+          <a href='${link}'>${people[victim.victim].name}</a>
+        </td>
         <td/>
       </tr>
     </tbody>

@@ -2,7 +2,9 @@
       xmlns:xi="http://www.w3.org/2001/XInclude">
 
 <?python
-  people = event.members
+  people = [person
+            for person in event.members
+            if not person.removed]
 
   user_person, = [person
                   for person in people
