@@ -5,10 +5,17 @@
   people = [person
             for person in event.members
             if not person.removed]
+  if not people:
+    raise ValueError('No people left')
 
-  user_person, = [person
+  user_id = g.user.id if g.user else None
+  user_persons = [person
                   for person in people
-                  if person.user_id == g.user.id]
+                  if person.user_id == user_id]
+  if not user_persons:
+    user_person = people[0]
+  else:
+    user_person = user_persons[0]
 
   # FIXME - figure out where the flying fuck dict got bound to some random
   # value.
