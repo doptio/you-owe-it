@@ -12,8 +12,8 @@ Creating a Development Environment
 
 2. Create a virtualenv::
 
-    virtualenv --no-site-packages --prompt '(yoi) ' py
-    source py/bin/activate
+    virtualenv --no-site-packages --prompt '(yoi) ' venv
+    source venv/bin/activate
     pip install -r requirements.txt
     pip install -r development-requirements.txt
     python setup.py develop
