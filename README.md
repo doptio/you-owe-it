@@ -7,8 +7,8 @@ Creating a Development Environment
 1. Clone this repository.
 1 1/2. Install packages::
 
-    sudo apt-get install python-dev build-essentials libxml2-dev libxslt-dev \
-        libpq-dev postgresql
+    sudo apt-get install python-dev build-essential libxml2-dev libxslt-dev \
+        libpq-dev postgresql libmemcached-dev
 
 2. Create a virtualenv::
 
