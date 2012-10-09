@@ -26,6 +26,25 @@ app.config['PROPAGATE_EXCEPTIONS'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SECRET_KEY'] = secret
 
+# Global HTTP response headers
+cache_headers = [
+    ('Cache-Control', 'public'),
+]
+no_cache_headers = [
+    ('Cache-Control', 'no-cache'),
+    ('Expires', 'Sat, 07 Jul 1979 23:00:00 GMT'),
+]
+
+@app.after_request
+def add_global_headers(response):
+    expires = getattr(response, 'expires', None)
+    if expires:
+        response.headers.extend(cache_headers)
+    else:
+        response.headers.extend(no_cache_headers)
+
+    return response
+
 # Nice error pages
 @app.errorhandler(404)
 def not_found(e):
