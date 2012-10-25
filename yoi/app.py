@@ -1,6 +1,6 @@
 from __future__ import unicode_literals, division
 
-from flask import Flask
+from flask import Flask, request, redirect
 from flask.ext.sqlalchemy import SQLAlchemy
 import os
 from raven import Client
@@ -34,6 +34,16 @@ no_cache_headers = [
     ('Cache-Control', 'no-cache'),
     ('Expires', 'Sat, 07 Jul 1979 23:00:00 GMT'),
 ]
+
+# FIXME - should use yoi.config.in_production here.
+if os.environ.get('ENVIRONMENT') == 'production':
+    @app.before_request
+    def canonical_redirect():
+        if not request.environ.get('HTTP_X_FORWARDED_PROTO') == 'https':
+            return redirect(request.url.replace('http://', 'https://'))
+        if request.host != 'uowe.it':
+            return redirect(request.url.replace('://' + request.host,
+                                                '://uowe.it'))
 
 @app.after_request
 def add_global_headers(response):
