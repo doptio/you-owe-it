@@ -394,3 +394,7 @@ def admin_list_events():
 @app.route('/admin/uncaught-exception')
 def admin_uncaught_exception():
     raise AssertionError('2 + 2 != 5')
+
+@app.route('/admin/env')
+def admin_env():
+    return render_response('admin/env.html', {'env': request.environ})
