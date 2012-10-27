@@ -8,7 +8,7 @@ from raven.middleware import Sentry
 
 from yoi.account.user import bp as account
 from yoi.config import secret, testing, database_url, use_debugger, \
-                       in_production
+                       in_production, canonical_domain, always_secure
 from yoi import dweeb
 from yoi.flask_genshi import Genshi, render_response
 from yoi import middleware
@@ -27,6 +27,11 @@ app.config['DEBUG'] = True
 app.config['PROPAGATE_EXCEPTIONS'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SECRET_KEY'] = secret
+
+if canonical_domain:
+    app.config['SESSION_COOKIE_DOMAIN'] = canonical_domain
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SECURE'] = always_secure
 
 # Global HTTP response headers
 cache_headers = [

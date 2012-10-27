@@ -17,6 +17,7 @@ testing = os.environ.get('TESTING') == 'true'
 in_production = os.environ.get('ENVIRONMENT') == 'production'
 use_debugger = not (testing or in_production)
 always_secure = in_production
+canonical_domain = os.environ.get('CANONICAL_DOMAIN')
 
 if in_production:
     secret = os.environ['SECURE_COOKIE_SECRET']
