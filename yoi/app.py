@@ -24,8 +24,6 @@ app.register_blueprint(account)
 # FIXME - Use app.config.from_object
 app.config['DEBUG'] = True
 app.config['PROPAGATE_EXCEPTIONS'] = True
-#app.config['TESTING'] = testing
-#app.config['CSRF_ENABLED'] = not testing
 app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SECRET_KEY'] = secret
 
