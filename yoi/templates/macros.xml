@@ -7,7 +7,7 @@
   def avatar_url(email, **kwargs):
     hash = md5((email or '').lower()).hexdigest()
     qs = urlencode(kwargs)
-    return 'http://www.gravatar.com/avatar/{}?{}'.format(hash, qs)
+    return 'https://www.gravatar.com/avatar/{}?{}'.format(hash, qs)
 ?>
 
 <py:def function='render_date(dt, if_none="")'>
