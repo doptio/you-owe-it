@@ -41,6 +41,9 @@ no_cache_headers = [
     ('Cache-Control', 'no-cache'),
     ('Expires', 'Sat, 07 Jul 1979 23:00:00 GMT'),
 ]
+hsts_headers = [
+    ('Strict-Transport-Security', 'max-age=31536000; includeSubDomains'),
+]
 
 @app.after_request
 def add_global_headers(response):
@@ -49,6 +52,9 @@ def add_global_headers(response):
         response.headers.extend(cache_headers)
     else:
         response.headers.extend(no_cache_headers)
+
+    if request.is_secure:
+        response.headers.extend(hsts_headers)
 
     return response
 
