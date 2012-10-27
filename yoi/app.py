@@ -7,7 +7,8 @@ from raven import Client
 from raven.middleware import Sentry
 
 from yoi.account.user import bp as account
-from yoi.config import secret, testing, database_url, use_debugger
+from yoi.config import secret, testing, database_url, use_debugger, \
+                       in_production
 from yoi import dweeb
 from yoi.flask_genshi import Genshi, render_response
 from yoi import middleware
@@ -36,8 +37,7 @@ no_cache_headers = [
     ('Expires', 'Sat, 07 Jul 1979 23:00:00 GMT'),
 ]
 
-# FIXME - should use yoi.config.in_production here.
-if os.environ.get('ENVIRONMENT') == 'production':
+if in_production:
     @app.before_request
     def canonical_redirect():
         ### FIXME - Want HSTS headers!
@@ -76,6 +76,5 @@ with app.test_request_context('/'):
                               get_flashed_messages=lambda **kwargs: [],
                               static_url=static_url)
                     .render('html'))
-# FIXME - should use yoi.config.in_production here.
-if os.environ.get('ENVIRONMENT') == 'production':
+if in_production:
     app.wsgi_app = middleware.error_page(app.wsgi_app, error_page)
