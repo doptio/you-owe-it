@@ -59,7 +59,8 @@
                   <li><a href='/logout'>logout</a></li>
                 </ul>
               </li>
-              <li py:if='not g.user'><a href='/login'>login</a></li>
+              <li py:if='not g.user'><a class='submit-login-form'
+                                        href='/login'>login</a></li>
             </ul>
           </div>
         </div>
@@ -91,6 +92,11 @@
     <script src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js'></script>
 
     <script src='${static_url("site.js")}'></script>
+
+    <form method='POST' action='/login' id='login-form'>
+      <input type='hidden' name='openid'
+             value='https://www.google.com/accounts/o8/id'/>
+    </form>
   </body>
 </py:match>
 </html>

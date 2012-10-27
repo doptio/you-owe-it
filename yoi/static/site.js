@@ -301,3 +301,11 @@ $(document).ready(function() {
                  function() { document.location.reload() });
     });
 });
+
+/* Magic for submitting login-form with <a/>s */
+$(document).ready(function() {
+    $('.submit-login-form').on('activate click', function(ev) {
+        ev.preventDefault();
+        $('#login-form').submit();
+    });
+});

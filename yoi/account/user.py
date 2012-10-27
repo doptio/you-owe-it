@@ -60,7 +60,7 @@ def login():
     if g.user:
         return redirect(url_for('home'))
 
-    form = LoginForm()
+    form = LoginForm(csrf_enabled=False)
     if form.validate_on_submit():
         realm = url_for('index', _external=True)
         return_to = url_for('.openid_return',
