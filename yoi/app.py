@@ -8,11 +8,14 @@ from raven.middleware import Sentry
 
 from yoi.account.user import bp as account
 from yoi.config import secret, testing, database_url, use_debugger
+from yoi import dweeb
 from yoi.flask_genshi import Genshi, render_response
 from yoi import middleware
 from yoi.resources import static_url
 
 app = Flask(__name__)
+app.request_class = dweeb.Request
+
 app.genshi = Genshi(app)
 app.db = SQLAlchemy(app)
 
@@ -39,7 +42,9 @@ no_cache_headers = [
 if os.environ.get('ENVIRONMENT') == 'production':
     @app.before_request
     def canonical_redirect():
-        if not request.environ.get('HTTP_X_FORWARDED_PROTO') == 'https':
+        ### FIXME - Want HSTS headers!
+        ### FIXME - Want 'http-only' session cookies!
+        if not request.is_secure:
             return redirect(request.url.replace('http://', 'https://'))
         if request.host != 'uowe.it':
             return redirect(request.url.replace('://' + request.host,
