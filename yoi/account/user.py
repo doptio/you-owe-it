@@ -84,6 +84,10 @@ def make_consumer():
     consumer = Consumer(session, openid_store)
     return consumer
 
+def set_session_user(user):
+    session['user_id'] = user.id
+    session.permanent = True
+
 @bp.route('/openid-return')
 def openid_return():
     return_to = url_for('.openid_return', _external=True)
@@ -100,7 +104,7 @@ def openid_return():
                 .first())
 
     if user:
-        session['user_id'] = user.id
+        set_session_user(user)
         return redirect(request.args['r'])
 
     extra = sreg.SRegResponse.fromSuccessResponse(result)
@@ -122,7 +126,7 @@ def openid_return():
     db.session.add(openid)
     db.session.commit()
 
-    session['user_id'] = user.id
+    set_session_user(user)
 
     if name:
         flash('Welcome, %s!' % name)
