@@ -42,17 +42,6 @@ no_cache_headers = [
     ('Expires', 'Sat, 07 Jul 1979 23:00:00 GMT'),
 ]
 
-if in_production:
-    @app.before_request
-    def canonical_redirect():
-        ### FIXME - Want HSTS headers!
-        ### FIXME - Want 'http-only' session cookies!
-        if not request.is_secure:
-            return redirect(request.url.replace('http://', 'https://'))
-        if request.host != 'uowe.it':
-            return redirect(request.url.replace('://' + request.host,
-                                                '://uowe.it'))
-
 @app.after_request
 def add_global_headers(response):
     expires = getattr(response, 'expires', None)
@@ -62,6 +51,14 @@ def add_global_headers(response):
         response.headers.extend(no_cache_headers)
 
     return response
+
+@app.before_request
+def canonical_redirect():
+    if always_secure and not request.is_secure:
+        return redirect(request.url.replace('http://', 'https://'))
+    if canonical_domain and request.host != canonical_domain:
+        return redirect(request.url.replace('://' + request.host,
+                                                '://' + canonical_domain))
 
 # Nice error pages
 @app.errorhandler(404)
