@@ -7,8 +7,11 @@ from raven import Client
 from raven.middleware import Sentry
 
 from yoi.account.user import bp as account
-from yoi.config import secret, testing, database_url, use_debugger, \
-                       in_production, canonical_domain, always_secure
+from yoi.config import (secret,
+                        database_url,
+                        in_production,
+                        canonical_domain,
+                        always_secure)
 from yoi import dweeb
 from yoi.flask_genshi import Genshi, render_response
 from yoi import middleware
@@ -45,6 +48,7 @@ hsts_headers = [
     ('Strict-Transport-Security', 'max-age=31536000; includeSubDomains'),
 ]
 
+
 @app.after_request
 def add_global_headers(response):
     expires = getattr(response, 'expires', None)
@@ -58,13 +62,15 @@ def add_global_headers(response):
 
     return response
 
+
 @app.before_request
 def canonical_redirect():
     if always_secure and not request.is_secure:
         return redirect(request.url.replace('http://', 'https://'))
     if canonical_domain and request.host != canonical_domain:
         return redirect(request.url.replace('://' + request.host,
-                                                '://' + canonical_domain))
+                                            '://' + canonical_domain))
+
 
 # Nice error pages
 @app.errorhandler(404)
@@ -75,14 +81,16 @@ def not_found(e):
 if 'SENTRY_URL' in os.environ:
     app.wsgi_app = Sentry(app.wsgi_app, Client(os.environ['SENTRY_URL']))
 
+
 # Nice 'Internal Server Error' page
 # FIXME - should use render_template.
 with app.test_request_context('/'):
     error_page = (app.genshi
-                    .template_loader.load('500.html')
-                    .generate(g={'user': None},
-                              get_flashed_messages=lambda **kwargs: [],
-                              static_url=static_url)
-                    .render('html'))
+                  .template_loader.load('500.html')
+                  .generate(g={'user': None},
+                            get_flashed_messages=lambda **kwargs: [],
+                            static_url=static_url)
+                  .render('html'))
+
 if in_production:
     app.wsgi_app = middleware.error_page(app.wsgi_app, error_page)
