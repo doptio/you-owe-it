@@ -241,7 +241,7 @@ class NewEntryForm(Form):
     date = DateField(default=date.today, validators=[Required()])
     description = TextField(validators=[Required(), Length(min=1, max=100)])
     manual_entry = BooleanField()
-    amount = DecimalField(validators=[Required(), NumberRange(min=1)])
+    amount = DecimalField(validators=[Required()])
 
     victims = ListOf(IntegerField())
     shares = ListOf(DecimalField())
